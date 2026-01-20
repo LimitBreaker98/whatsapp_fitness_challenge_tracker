@@ -13,12 +13,14 @@ PACIFIC_TZ = ZoneInfo("America/Los_Angeles")
 
 app = FastAPI(title="Fitness Challenge Tracker API")
 
-# CORS for frontend
+# CORS for frontend - configurable via environment variable
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Configure appropriately for production
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 

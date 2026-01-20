@@ -1,8 +1,10 @@
 import json
+import os
 from pathlib import Path
 from typing import Dict, Optional
 
-DATA_FILE = Path(__file__).parent / "data.json"
+DATA_DIR = Path(os.getenv("DATA_DIR", Path(__file__).parent))
+DATA_FILE = DATA_DIR / "data.json"
 
 
 def _get_empty_data() -> dict:
