@@ -1,16 +1,31 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { submitUpdate } from '../api';
 import './AdminPage.css';
 
-export default function AdminPage() {
-  const [searchParams] = useSearchParams();
-  const apiKey = searchParams.get('key') || '';
+const SESSION_KEY = 'admin_api_key';
 
+export default function AdminPage() {
+  const [apiKey, setApiKey] = useState(() => sessionStorage.getItem(SESSION_KEY) || '');
+  const [keyInput, setKeyInput] = useState('');
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState(null); // { type: 'success' | 'error' | 'warning', text: string }
   const [loading, setLoading] = useState(false);
   const [pendingOverwrite, setPendingOverwrite] = useState(null); // { message, date }
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (keyInput.trim()) {
+      sessionStorage.setItem(SESSION_KEY, keyInput.trim());
+      setApiKey(keyInput.trim());
+      setKeyInput('');
+    }
+  };
+
+  const handleLogout = () => {
+    sessionStorage.removeItem(SESSION_KEY);
+    setApiKey('');
+    setStatus(null);
+  };
 
   const handleSubmit = async (e, force = false) => {
     if (e) e.preventDefault();
@@ -63,9 +78,36 @@ export default function AdminPage() {
     setStatus(null);
   };
 
+  // Show login form if not authenticated
+  if (!apiKey) {
+    return (
+      <div className="admin-page">
+        <h2>Admin Login</h2>
+        <p className="instructions">Enter your API key to access the admin panel.</p>
+        <form onSubmit={handleLogin} className="login-form">
+          <input
+            type="password"
+            value={keyInput}
+            onChange={(e) => setKeyInput(e.target.value)}
+            placeholder="Enter API key..."
+            autoFocus
+          />
+          <button type="submit" disabled={!keyInput.trim()}>
+            Login
+          </button>
+        </form>
+      </div>
+    );
+  }
+
   return (
     <div className="admin-page">
-      <h2>Submit Daily Update</h2>
+      <div className="admin-header">
+        <h2>Submit Daily Update</h2>
+        <button className="logout-btn" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
       <p className="instructions">
         Paste the daily score message below. Format:
       </p>
@@ -86,16 +128,10 @@ Pocho: 8`}
           disabled={loading || pendingOverwrite}
         />
 
-        <button type="submit" disabled={loading || !apiKey || pendingOverwrite}>
+        <button type="submit" disabled={loading || pendingOverwrite}>
           {loading ? 'Submitting...' : 'Submit Update'}
         </button>
       </form>
-
-      {!apiKey && (
-        <p className="warning">
-          Add your API key to the URL: /admin?key=your-secret-key
-        </p>
-      )}
 
       {status && (
         <div className={`status ${status.type}`}>
