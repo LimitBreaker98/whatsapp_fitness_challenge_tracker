@@ -22,6 +22,7 @@ def load_data() -> dict:
 
 def save_data(data: dict) -> None:
     """Save data to JSON file."""
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     with open(DATA_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
