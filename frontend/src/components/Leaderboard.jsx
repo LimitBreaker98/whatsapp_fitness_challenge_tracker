@@ -65,21 +65,28 @@ export default function Leaderboard() {
           const dailyGain = data.daily_gains[name] || 0;
           const gainWidth = (dailyGain / maxScore) * 100;
           const rank = ranks[index];
+          const isNewPlayer = score === dailyGain && dailyGain > 0;
 
           return (
             <div key={name} className={`player-row rank-${rank}`}>
               <div className="rank">#{rank}</div>
               <div className="name">{name}</div>
               <div className="score">{score}</div>
-              <div className="bar-container">
-                {dailyGain > 0 && (
+              {dailyGain > 0 ? (
+                <div className="bar-container">
                   <div
                     className="bar-gain"
                     style={{ width: `${gainWidth}%` }}
                   />
-                )}
-              </div>
-              {dailyGain > 0 && <span className="gain-badge">+{dailyGain}</span>}
+                </div>
+              ) : (
+                <div className="bar-placeholder" />
+              )}
+              {isNewPlayer ? (
+                <span className="welcome-badge">Welcome {name}!</span>
+              ) : dailyGain > 0 ? (
+                <span className="gain-badge">+{dailyGain}</span>
+              ) : null}
             </div>
           );
         })}

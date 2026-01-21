@@ -99,11 +99,14 @@
 }
 
 .bar-container {
-  position: relative;
   height: 12px;
   background: #e9ecef;
   border-radius: 6px;
   overflow: hidden;
+}
+
+.bar-placeholder {
+  height: 12px;
 }
 
 .bar-gain {
@@ -129,4 +132,14 @@
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+.welcome-badge {
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
