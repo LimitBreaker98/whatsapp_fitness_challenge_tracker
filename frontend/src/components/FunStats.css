@@ -1,0 +1,125 @@
+.fun-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.fun-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.fun-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.fun-card-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.fun-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.fun-card-content h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fun-card-content p {
+  margin: 0;
+  font-size: 1rem;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.fun-card-content p + p {
+  margin-top: 0.25rem;
+}
+
+.fun-card-content strong {
+  font-weight: 700;
+}
+
+.fun-card-detail {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* Streak card */
+.streak-card {
+  border-left: 4px solid #f97316;
+}
+
+.streak-card .fun-card-content strong {
+  color: #ea580c;
+}
+
+/* Consistent card */
+.consistent-card {
+  border-left: 4px solid #8b5cf6;
+}
+
+.consistent-card .fun-card-content strong {
+  color: #7c3aed;
+}
+
+/* Rivalry card */
+.rivalry-card {
+  border-left: 4px solid #ef4444;
+}
+
+.rivalry-card .fun-card-content strong {
+  color: #1a1a1a;
+}
+
+.rivalry-gap {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.15rem 0.5rem;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 4px;
+}
+
+/* Slacker card */
+.slacker-card {
+  border-left: 4px solid #94a3b8;
+}
+
+.slacker-card .fun-card-content strong {
+  color: #64748b;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 500px) {
+  .fun-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .fun-card {
+    padding: 1rem;
+  }
+
+  .fun-card-icon {
+    font-size: 1.75rem;
+  }
+}

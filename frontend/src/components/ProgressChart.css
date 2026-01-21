@@ -23,6 +23,8 @@
   align-items: center;
   margin-bottom: 0.5rem;
   min-height: 28px;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
 }
 
 .chart-header h3 {
@@ -36,7 +38,8 @@
   font-size: 0.85rem;
   color: #666;
   text-align: right;
-  min-width: 200px;
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .chart-header .active-hint span {
@@ -46,4 +49,17 @@
 .chart-header .hint-muted {
   color: #aaa;
   font-style: italic;
+}
+
+/* Mobile: stack header vertically */
+@media (max-width: 400px) {
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .chart-header .active-hint {
+    text-align: left;
+    font-size: 0.8rem;
+  }
 }

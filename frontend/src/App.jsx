@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Leaderboard from './components/Leaderboard';
+import FunStats from './components/FunStats';
 import ProgressChart from './components/ProgressChart';
 import AdminPage from './components/AdminPage';
 import './App.css';
@@ -8,6 +9,7 @@ function Dashboard() {
   return (
     <div className="dashboard">
       <Leaderboard />
+      <FunStats />
       <ProgressChart />
     </div>
   );

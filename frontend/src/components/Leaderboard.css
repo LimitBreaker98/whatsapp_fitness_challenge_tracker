@@ -55,20 +55,36 @@
 
 .rank {
   font-weight: 700;
-  color: #666;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #e0e0e0;
+  color: #555;
 }
 
+/* Gold medal - 1st place */
 .player-row:nth-child(1) .rank {
-  color: #ffd700;
+  background: linear-gradient(135deg, #ffd700 0%, #ffec8b 50%, #daa520 100%);
+  color: #5c4a00;
+  box-shadow: 0 2px 4px rgba(218, 165, 32, 0.3);
 }
 
+/* Silver medal - 2nd place */
 .player-row:nth-child(2) .rank {
-  color: #c0c0c0;
+  background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 50%, #a8a8a8 100%);
+  color: #404040;
+  box-shadow: 0 2px 4px rgba(128, 128, 128, 0.3);
 }
 
+/* Bronze medal - 3rd place */
 .player-row:nth-child(3) .rank {
-  color: #cd7f32;
+  background: linear-gradient(135deg, #cd7f32 0%, #dea05e 50%, #b8722e 100%);
+  color: #4a2c10;
+  box-shadow: 0 2px 4px rgba(205, 127, 50, 0.3);
 }
 
 .name {
