@@ -143,3 +143,44 @@
   font-weight: 600;
   white-space: nowrap;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 500px) {
+  .leaderboard {
+    padding: 1rem;
+  }
+
+  .player-row {
+    grid-template-columns: 32px 1fr auto;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .player-row .name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .player-row .score {
+    text-align: left;
+  }
+
+  /* Hide bar on mobile to save space */
+  .bar-container,
+  .bar-placeholder {
+    display: none;
+  }
+
+  .rank {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+
+  .gain-badge,
+  .welcome-badge {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+  }
+}
