@@ -45,6 +45,16 @@ export default function Leaderboard() {
     ([, a], [, b]) => b - a
   );
 
+  // Calculate ranks with ties (same score = same rank, then skip)
+  const ranks = [];
+  let currentRank = 1;
+  for (let i = 0; i < sortedPlayers.length; i++) {
+    if (i > 0 && sortedPlayers[i][1] < sortedPlayers[i - 1][1]) {
+      currentRank = i + 1; // Skip ranks for ties
+    }
+    ranks.push(currentRank);
+  }
+
   return (
     <div className="leaderboard">
       <h2>Leaderboard</h2>
@@ -53,26 +63,19 @@ export default function Leaderboard() {
       <div className="players">
         {sortedPlayers.map(([name, score], index) => {
           const dailyGain = data.daily_gains[name] || 0;
-          const baseWidth = ((score - dailyGain) / maxScore) * 100;
           const gainWidth = (dailyGain / maxScore) * 100;
+          const rank = ranks[index];
 
           return (
-            <div key={name} className="player-row">
-              <div className="rank">#{index + 1}</div>
+            <div key={name} className={`player-row rank-${rank}`}>
+              <div className="rank">#{rank}</div>
               <div className="name">{name}</div>
               <div className="score">{score}</div>
               <div className="bar-container">
-                <div
-                  className="bar-base"
-                  style={{ width: `${baseWidth}%` }}
-                />
                 {dailyGain > 0 && (
                   <div
                     className="bar-gain"
-                    style={{
-                      left: `${baseWidth}%`,
-                      width: `${gainWidth}%`,
-                    }}
+                    style={{ width: `${gainWidth}%` }}
                   />
                 )}
               </div>
