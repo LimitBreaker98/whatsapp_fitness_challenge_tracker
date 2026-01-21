@@ -2,6 +2,11 @@ import { useState, useEffect } from 'react';
 import { fetchScores } from '../api';
 import './FunStats.css';
 
+// Mene didn't bet, everyone else put in $20
+const BET_AMOUNT = 20;
+const FREE_RIDER = 'Mene';
+const DISTRIBUTION = [50, 35, 10, 5, 0];
+
 export default function FunStats() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -27,6 +32,10 @@ export default function FunStats() {
   const entries = data.entries;
   const players = Object.keys(entries[entries.length - 1].scores);
 
+  // Calculate money in play (everyone except Mene)
+  const bettingPlayers = players.filter(p => p !== FREE_RIDER);
+  const totalPot = bettingPlayers.length * BET_AMOUNT;
+
   // Calculate streaks (consecutive days with gains > 0)
   const streaks = calculateStreaks(entries, players);
   const activeStreaks = streaks.filter(s => s.streak >= 2).sort((a, b) => b.streak - a.streak);
@@ -43,62 +52,103 @@ export default function FunStats() {
 
   return (
     <div className="fun-stats">
-      {activeStreaks.length > 0 && (
-        <div className="fun-card streak-card">
-          <div className="fun-card-icon">🔥</div>
-          <div className="fun-card-content">
-            <h4>Hot Streak</h4>
-            {activeStreaks.slice(0, 2).map(({ player, streak }) => (
-              <p key={player}>
-                <strong>{player}</strong> is on a {streak}-day streak!
-              </p>
+      {/* Money cards - smaller */}
+      <div className="fun-card mini-card pot-card">
+        <div className="fun-card-icon">💰</div>
+        <div className="fun-card-content">
+          <h4>Prize Pool</h4>
+          <p className="big-number">${totalPot}</p>
+          <span className="fun-card-detail">{bettingPlayers.length} players × ${BET_AMOUNT}</span>
+        </div>
+      </div>
+
+      <div className="fun-card mini-card distribution-card">
+        <div className="fun-card-icon">🏆</div>
+        <div className="fun-card-content">
+          <h4>Payout Split</h4>
+          <div className="distribution-bars">
+            {DISTRIBUTION.map((pct, i) => (
+              <div key={i} className="dist-item">
+                <span className="dist-place">#{i + 1}</span>
+                <div className="dist-bar-bg">
+                  <div className="dist-bar" style={{ width: `${pct}%` }} />
+                </div>
+                <span className="dist-pct">{pct}%</span>
+              </div>
             ))}
           </div>
         </div>
-      )}
+      </div>
 
-      {consistency && (
-        <div className="fun-card consistent-card">
-          <div className="fun-card-icon">🎯</div>
-          <div className="fun-card-content">
-            <h4>Most Consistent</h4>
-            <p>
-              <strong>{consistency.player}</strong> — "The Machine"
-            </p>
-            <span className="fun-card-detail">
-              Avg {consistency.avgGain.toFixed(1)} pts/day
-            </span>
-          </div>
+      {/* Stats cards */}
+      <div className="fun-card streak-card">
+        <div className="fun-card-icon">🔥</div>
+        <div className="fun-card-content">
+          <h4>Hot Streak</h4>
+          {activeStreaks.length > 0 ? (
+            activeStreaks.slice(0, 2).map(({ player, streak }) => (
+              <p key={player}>
+                <strong>{player}</strong> is on a {streak}-day streak!
+              </p>
+            ))
+          ) : (
+            <p className="empty-state">No active streaks yet</p>
+          )}
         </div>
-      )}
+      </div>
 
-      {rivalries.length > 0 && (
-        <div className="fun-card rivalry-card">
-          <div className="fun-card-icon">⚔️</div>
-          <div className="fun-card-content">
-            <h4>Rivalry Watch</h4>
-            {rivalries.slice(0, 1).map(({ player1, player2, gap }, i) => (
+      <div className="fun-card consistent-card">
+        <div className="fun-card-icon">🎯</div>
+        <div className="fun-card-content">
+          <h4>Most Consistent</h4>
+          {consistency ? (
+            <>
+              <p>
+                <strong>{consistency.player}</strong> — "The Machine"
+              </p>
+              <span className="fun-card-detail">
+                Avg {consistency.avgGain.toFixed(1)} pts/day
+              </span>
+            </>
+          ) : (
+            <p className="empty-state">Need more data...</p>
+          )}
+        </div>
+      </div>
+
+      <div className="fun-card rivalry-card">
+        <div className="fun-card-icon">⚔️</div>
+        <div className="fun-card-content">
+          <h4>Rivalry Watch</h4>
+          {rivalries.length > 0 ? (
+            rivalries.slice(0, 1).map(({ player1, player2, gap }, i) => (
               <p key={i}>
                 <strong>{player1}</strong> vs <strong>{player2}</strong>
                 <span className="rivalry-gap">{gap} pts apart!</span>
               </p>
-            ))}
-          </div>
+            ))
+          ) : (
+            <p className="empty-state">No close battles right now</p>
+          )}
         </div>
-      )}
+      </div>
 
-      {slackers.length > 0 && (
-        <div className="fun-card slacker-card">
-          <div className="fun-card-icon">😴</div>
-          <div className="fun-card-content">
-            <h4>Slacker Alert</h4>
-            <p>
-              <strong>{slackers[0].player}</strong> hasn't scored in {slackers[0].days} days...
-            </p>
-            <span className="fun-card-detail">Time to get moving!</span>
-          </div>
+      <div className="fun-card slacker-card">
+        <div className="fun-card-icon">😴</div>
+        <div className="fun-card-content">
+          <h4>Slacker Alert</h4>
+          {slackers.length > 0 ? (
+            <>
+              <p>
+                <strong>{slackers[0].player}</strong> hasn't scored in {slackers[0].days} days...
+              </p>
+              <span className="fun-card-detail">Time to get moving!</span>
+            </>
+          ) : (
+            <p className="empty-state">Everyone's putting in work!</p>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }

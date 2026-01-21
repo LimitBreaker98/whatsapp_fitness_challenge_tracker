@@ -109,6 +109,84 @@
   color: #64748b;
 }
 
+/* Empty state */
+.empty-state {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* Mini cards (pot & distribution) */
+.mini-card {
+  padding: 1rem;
+}
+
+.mini-card .fun-card-icon {
+  font-size: 1.5rem;
+}
+
+.mini-card .fun-card-content h4 {
+  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+}
+
+/* Prize pool card */
+.pot-card {
+  border-left: 4px solid #22c55e;
+}
+
+.pot-card .big-number {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #16a34a;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Distribution card */
+.distribution-card {
+  border-left: 4px solid #eab308;
+}
+
+.distribution-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dist-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+}
+
+.dist-place {
+  width: 20px;
+  color: #888;
+  font-weight: 600;
+}
+
+.dist-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: #f0f0f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.dist-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  border-radius: 4px;
+}
+
+.dist-pct {
+  width: 28px;
+  text-align: right;
+  font-weight: 600;
+  color: #666;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 500px) {
   .fun-stats {
