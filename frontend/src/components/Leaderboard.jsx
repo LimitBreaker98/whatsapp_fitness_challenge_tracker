@@ -101,6 +101,10 @@ export default function Leaderboard() {
               )}
               {isNewPlayer ? (
                 <span className="welcome-badge">Welcome {name}!</span>
+              ) : dailyGain >= 4 ? (
+                <span className="gain-badge gain-epic">+{dailyGain}</span>
+              ) : dailyGain >= 2 ? (
+                <span className="gain-badge gain-rare">+{dailyGain}</span>
               ) : dailyGain > 0 ? (
                 <span className="gain-badge">+{dailyGain}</span>
               ) : null}
