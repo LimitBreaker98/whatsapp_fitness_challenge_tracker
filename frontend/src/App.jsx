@@ -3,6 +3,7 @@ import Leaderboard from './components/Leaderboard';
 import FunStats from './components/FunStats';
 import ProgressChart from './components/ProgressChart';
 import AdminPage from './components/AdminPage';
+import RulesPage from './components/RulesPage';
 import './App.css';
 
 function Dashboard() {
@@ -23,6 +24,7 @@ function App() {
           <h1>Fitness Challenge</h1>
           <nav>
             <Link to="/">Dashboard</Link>
+            <Link to="/rules">Rules</Link>
             <Link to="/admin">Admin</Link>
           </nav>
         </header>
@@ -30,6 +32,7 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/rules" element={<RulesPage />} />
             <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </main>
