@@ -1,9 +1,11 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import Leaderboard from './components/Leaderboard';
 import FunStats from './components/FunStats';
 import ProgressChart from './components/ProgressChart';
 import AdminPage from './components/AdminPage';
 import RulesPage from './components/RulesPage';
+import LanguageToggle from './components/LanguageToggle';
 import './App.css';
 
 function Dashboard() {
@@ -17,15 +19,18 @@ function Dashboard() {
 }
 
 function App() {
+  const { t } = useTranslation();
+
   return (
     <BrowserRouter>
       <div className="app">
         <header>
-          <h1>Fitness Challenge</h1>
+          <h1>{t('title')}</h1>
           <nav>
-            <Link to="/">Dashboard</Link>
-            <Link to="/rules">Rules</Link>
-            <Link to="/admin">Admin</Link>
+            <Link to="/">{t('nav.dashboard')}</Link>
+            <Link to="/rules">{t('nav.rules')}</Link>
+            <Link to="/admin">{t('nav.admin')}</Link>
+            <LanguageToggle />
           </nav>
         </header>
 

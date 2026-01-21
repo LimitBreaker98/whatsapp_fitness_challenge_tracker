@@ -1,0 +1,11 @@
+{
+  "title": "Reto de Ejercicio",
+  "nav": {
+    "dashboard": "Tablero",
+    "rules": "Reglas",
+    "admin": "Admin"
+  },
+  "loading": "Cargando...",
+  "error": "Error: {{message}}",
+  "noData": "Sin datos aún"
+}

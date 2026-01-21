@@ -1,0 +1,11 @@
+{
+  "title": "Fitness Challenge",
+  "nav": {
+    "dashboard": "Dashboard",
+    "rules": "Rules",
+    "admin": "Admin"
+  },
+  "loading": "Loading...",
+  "error": "Error: {{message}}",
+  "noData": "No data yet"
+}

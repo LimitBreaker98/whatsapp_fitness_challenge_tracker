@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { fetchScores } from '../api';
 import './FunStats.css';
 
@@ -8,6 +9,7 @@ const FREE_RIDER = 'Mene';
 const DISTRIBUTION = [50, 35, 10, 5, 0];
 
 export default function FunStats() {
+  const { t } = useTranslation('funStats');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -56,16 +58,16 @@ export default function FunStats() {
       <div className="fun-card mini-card pot-card">
         <div className="fun-card-icon">💰</div>
         <div className="fun-card-content">
-          <h4>Prize Pool</h4>
+          <h4>{t('prizePool.title')}</h4>
           <p className="big-number">${totalPot}</p>
-          <span className="fun-card-detail">{bettingPlayers.length} players × ${BET_AMOUNT}</span>
+          <span className="fun-card-detail">{t('prizePool.detail', { count: bettingPlayers.length, amount: BET_AMOUNT })}</span>
         </div>
       </div>
 
       <div className="fun-card mini-card distribution-card">
         <div className="fun-card-icon">🏆</div>
         <div className="fun-card-content">
-          <h4>Payout Split</h4>
+          <h4>{t('payoutSplit.title')}</h4>
           <div className="distribution-bars">
             {DISTRIBUTION.map((pct, i) => (
               <div key={i} className="dist-item">
@@ -84,15 +86,15 @@ export default function FunStats() {
       <div className="fun-card streak-card">
         <div className="fun-card-icon">🔥</div>
         <div className="fun-card-content">
-          <h4>Hot Streak</h4>
+          <h4>{t('hotStreak.title')}</h4>
           {activeStreaks.length > 0 ? (
             activeStreaks.slice(0, 2).map(({ player, streak }) => (
               <p key={player}>
-                <strong>{player}</strong> is on a {streak}-day streak!
+                {t('hotStreak.message', { player, count: streak })}
               </p>
             ))
           ) : (
-            <p className="empty-state">No active streaks yet</p>
+            <p className="empty-state">{t('hotStreak.empty')}</p>
           )}
         </div>
       </div>
@@ -100,18 +102,18 @@ export default function FunStats() {
       <div className="fun-card consistent-card">
         <div className="fun-card-icon">🎯</div>
         <div className="fun-card-content">
-          <h4>Most Consistent</h4>
+          <h4>{t('mostConsistent.title')}</h4>
           {consistency ? (
             <>
               <p>
-                <strong>{consistency.player}</strong> — "The Machine"
+                <strong>{consistency.player}</strong> — {t('mostConsistent.nickname')}
               </p>
               <span className="fun-card-detail">
-                Avg {consistency.avgGain.toFixed(1)} pts/day
+                {t('mostConsistent.avgGain', { value: consistency.avgGain.toFixed(1) })}
               </span>
             </>
           ) : (
-            <p className="empty-state">Need more data...</p>
+            <p className="empty-state">{t('mostConsistent.empty')}</p>
           )}
         </div>
       </div>
@@ -119,16 +121,16 @@ export default function FunStats() {
       <div className="fun-card rivalry-card">
         <div className="fun-card-icon">⚔️</div>
         <div className="fun-card-content">
-          <h4>Rivalry Watch</h4>
+          <h4>{t('rivalryWatch.title')}</h4>
           {rivalries.length > 0 ? (
             rivalries.slice(0, 1).map(({ player1, player2, gap }, i) => (
               <p key={i}>
                 <strong>{player1}</strong> vs <strong>{player2}</strong>
-                <span className="rivalry-gap">{gap} pts apart!</span>
+                <span className="rivalry-gap">{t('rivalryWatch.gap', { gap })}</span>
               </p>
             ))
           ) : (
-            <p className="empty-state">No close battles right now</p>
+            <p className="empty-state">{t('rivalryWatch.empty')}</p>
           )}
         </div>
       </div>
@@ -136,16 +138,16 @@ export default function FunStats() {
       <div className="fun-card slacker-card">
         <div className="fun-card-icon">😴</div>
         <div className="fun-card-content">
-          <h4>Slacker Alert</h4>
+          <h4>{t('slackerAlert.title')}</h4>
           {slackers.length > 0 ? (
             <>
               <p>
-                <strong>{slackers[0].player}</strong> hasn't scored in {slackers[0].days} days...
+                {t('slackerAlert.message', { player: slackers[0].player, count: slackers[0].days })}
               </p>
-              <span className="fun-card-detail">Time to get moving!</span>
+              <span className="fun-card-detail">{t('slackerAlert.detail')}</span>
             </>
           ) : (
-            <p className="empty-state">Everyone's putting in work!</p>
+            <p className="empty-state">{t('slackerAlert.empty')}</p>
           )}
         </div>
       </div>

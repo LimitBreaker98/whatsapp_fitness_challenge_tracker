@@ -1,0 +1,15 @@
+{
+  "title": "Leaderboard",
+  "lastUpdate": "Last update: {{date}}",
+  "columns": {
+    "rank": "Rank",
+    "name": "Name",
+    "score": "Score",
+    "delta": "Delta",
+    "streak": "Streak",
+    "ptsBehind": "Pts Behind"
+  },
+  "welcome": "Welcome!",
+  "noStreak": "—",
+  "leader": "—"
+}

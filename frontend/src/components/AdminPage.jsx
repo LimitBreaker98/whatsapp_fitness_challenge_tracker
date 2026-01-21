@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { submitUpdate } from '../api';
 import './AdminPage.css';
 
 const SESSION_KEY = 'admin_api_key';
 
 export default function AdminPage() {
+  const { t } = useTranslation('admin');
   const [apiKey, setApiKey] = useState(() => sessionStorage.getItem(SESSION_KEY) || '');
   const [keyInput, setKeyInput] = useState('');
   const [message, setMessage] = useState('');
@@ -33,12 +35,12 @@ export default function AdminPage() {
     const msgToSubmit = force ? pendingOverwrite?.message : message;
 
     if (!msgToSubmit?.trim()) {
-      setStatus({ type: 'error', text: 'Please enter a message' });
+      setStatus({ type: 'error', text: t('errors.emptyMessage') });
       return;
     }
 
     if (!apiKey) {
-      setStatus({ type: 'error', text: 'API key required (add ?key=xxx to URL)' });
+      setStatus({ type: 'error', text: t('errors.apiKeyRequired') });
       return;
     }
 
@@ -82,18 +84,18 @@ export default function AdminPage() {
   if (!apiKey) {
     return (
       <div className="admin-page">
-        <h2>Admin Login</h2>
-        <p className="instructions">Enter your API key to access the admin panel.</p>
+        <h2>{t('login.title')}</h2>
+        <p className="instructions">{t('login.instructions')}</p>
         <form onSubmit={handleLogin} className="login-form">
           <input
             type="password"
             value={keyInput}
             onChange={(e) => setKeyInput(e.target.value)}
-            placeholder="Enter API key..."
+            placeholder={t('login.placeholder')}
             autoFocus
           />
           <button type="submit" disabled={!keyInput.trim()}>
-            Login
+            {t('login.button')}
           </button>
         </form>
       </div>
@@ -103,13 +105,13 @@ export default function AdminPage() {
   return (
     <div className="admin-page">
       <div className="admin-header">
-        <h2>Submit Daily Update</h2>
+        <h2>{t('submit.title')}</h2>
         <button className="logout-btn" onClick={handleLogout}>
-          Logout
+          {t('submit.logout')}
         </button>
       </div>
       <p className="instructions">
-        Paste the daily score message below. Format:
+        {t('submit.instructions')}
       </p>
       <pre className="format-example">
 {`January 18
@@ -123,13 +125,13 @@ Pocho: 8`}
         <textarea
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Paste daily update here..."
+          placeholder={t('submit.placeholder')}
           rows={8}
           disabled={loading || pendingOverwrite}
         />
 
         <button type="submit" disabled={loading || pendingOverwrite}>
-          {loading ? 'Submitting...' : 'Submit Update'}
+          {loading ? t('submit.submitting') : t('submit.button')}
         </button>
       </form>
 
@@ -141,22 +143,22 @@ Pocho: 8`}
 
       {pendingOverwrite && (
         <div className="confirmation-dialog">
-          <p>An entry for <strong>{pendingOverwrite.date}</strong> already exists.</p>
-          <p>Do you want to overwrite it?</p>
+          <p>{t('confirmation.exists', { date: pendingOverwrite.date })}</p>
+          <p>{t('confirmation.overwrite')}</p>
           <div className="confirmation-buttons">
             <button
               className="confirm-btn"
               onClick={handleConfirmOverwrite}
               disabled={loading}
             >
-              {loading ? 'Overwriting...' : 'Yes, Overwrite'}
+              {loading ? t('confirmation.overwriting') : t('confirmation.yesOverwrite')}
             </button>
             <button
               className="cancel-btn"
               onClick={handleCancelOverwrite}
               disabled={loading}
             >
-              Cancel
+              {t('confirmation.cancel')}
             </button>
           </div>
         </div>

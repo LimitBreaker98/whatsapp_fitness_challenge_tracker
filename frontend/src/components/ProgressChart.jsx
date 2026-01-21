@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Plot from 'react-plotly.js';
 import { fetchScores } from '../api';
 import './ProgressChart.css';
@@ -27,23 +28,27 @@ const MARKERS = [
 
 const INACTIVE_COLOR = '#d1d5db';
 
-const MONTH_SHORT = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
-  'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
-];
-
-function formatDate(dateStr) {
-  // Convert "YYYY-MM-DD" to "Mon DD, YYYY"
-  const [year, month, day] = dateStr.split('-');
-  const monthName = MONTH_SHORT[parseInt(month, 10) - 1];
-  return `${monthName} ${parseInt(day, 10)}, ${year}`;
-}
-
 export default function ProgressChart() {
+  const { t } = useTranslation('progressChart');
+  const { t: tCommon } = useTranslation('common');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activePlayer, setActivePlayer] = useState(null);
+
+  // Get month names from translations
+  const MONTH_SHORT = [
+    t('months.jan'), t('months.feb'), t('months.mar'), t('months.apr'),
+    t('months.may'), t('months.jun'), t('months.jul'), t('months.aug'),
+    t('months.sep'), t('months.oct'), t('months.nov'), t('months.dec')
+  ];
+
+  function formatDate(dateStr) {
+    // Convert "YYYY-MM-DD" to "Mon DD, YYYY"
+    const [year, month, day] = dateStr.split('-');
+    const monthName = MONTH_SHORT[parseInt(month, 10) - 1];
+    return `${monthName} ${parseInt(day, 10)}, ${year}`;
+  }
 
   useEffect(() => {
     async function loadData() {
@@ -60,10 +65,10 @@ export default function ProgressChart() {
     loadData();
   }, []);
 
-  if (loading) return <div className="progress-chart">Loading...</div>;
-  if (error) return <div className="progress-chart error">Error: {error}</div>;
+  if (loading) return <div className="progress-chart">{tCommon('loading')}</div>;
+  if (error) return <div className="progress-chart error">{tCommon('error', { message: error })}</div>;
   if (!data || data.entries.length === 0) {
-    return <div className="progress-chart empty">No data yet</div>;
+    return <div className="progress-chart empty">{tCommon('noData')}</div>;
   }
 
   // Extract unique players from all entries
@@ -118,18 +123,18 @@ export default function ProgressChart() {
 
   const layout = {
     title: {
-      text: 'Score Progression',
+      text: t('title'),
       font: { size: 20, color: '#1a1a1a' },
     },
     xaxis: {
-      title: 'Date',
+      title: t('axisLabels.date'),
       type: 'category',
       tickangle: -45,
       tickfont: { size: 11 },
       fixedrange: true,
     },
     yaxis: {
-      title: 'Cumulative Score',
+      title: t('axisLabels.score'),
       tickfont: { size: 11 },
       range: [0, yAxisMax],
       fixedrange: true,
@@ -171,12 +176,12 @@ export default function ProgressChart() {
   return (
     <div className="progress-chart">
       <div className="chart-header">
-        <h3>Score Progression</h3>
+        <h3>{t('title')}</h3>
         <div className="active-hint">
           {activePlayer ? (
-            <>Showing: <strong>{activePlayer}</strong> <span>(click to reset)</span></>
+            <>{t('showing', { player: activePlayer })} <span>{t('clickToReset')}</span></>
           ) : (
-            <span className="hint-muted">Click a line to highlight</span>
+            <span className="hint-muted">{t('hint')}</span>
           )}
         </div>
       </div>

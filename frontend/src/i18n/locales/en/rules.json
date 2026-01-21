@@ -1,0 +1,92 @@
+{
+  "title": "Challenge Rules",
+  "subtitle": "Friendly Exercise Challenge 2026",
+  "purpose": {
+    "title": "Purpose",
+    "description": "A friendly exercise challenge among friends designed to promote healthy and consistent physical activity, strengthen connections across borders (this is an international challenge!), and nurture friendship throughout the process.",
+    "highlight": "The main goal is not just to compete, but to maintain discipline, health, and consistency, supported by a spirit of mutual encouragement."
+  },
+  "duration": {
+    "title": "Duration",
+    "start": "Start",
+    "startDate": "Monday, January 19, 2026",
+    "end": "End",
+    "endDate": "Wednesday, June 10, 2026"
+  },
+  "general": {
+    "title": "General Rules",
+    "rules": [
+      "Each valid exercise session equals <strong>1 point</strong>",
+      "Only <strong>1 point per day</strong> maximum (with exceptions below)",
+      "The challenge is based on <strong>honesty, good faith, and personal responsibility</strong>",
+      "Evidence of exercise is required for points to count"
+    ]
+  },
+  "exercises": {
+    "title": "Valid Exercise Types",
+    "running": {
+      "title": "Running / Jogging",
+      "rules": [
+        "Minimum <strong>5 km</strong> = 1 point",
+        "<strong>21.1 km</strong> (Half Marathon) = 2 points",
+        "<strong>42.2 km</strong> (Marathon) = 4 points"
+      ],
+      "note": "Bonus points only apply for these specific distances."
+    },
+    "strength": {
+      "title": "Strength Training",
+      "description": "Sessions that include at least <strong>4 different strength exercises</strong>:",
+      "types": [
+        "Weight lifting",
+        "Calisthenics",
+        "Functional training",
+        "Resistance bands or machines"
+      ],
+      "note": "Each valid session = 1 point"
+    },
+    "cardio": {
+      "title": "Other Cardio / Intense Exercise",
+      "description": "Any exercise meeting <strong>ALL</strong> of these conditions:",
+      "conditions": [
+        "Minimum <strong>30 minutes</strong> duration",
+        "Average heart rate of <strong>120+ bpm</strong>",
+        "Sustained physical effort"
+      ],
+      "examples": "Examples: Cycling, Swimming, Elliptical, Group classes (Spinning, HIIT), Skiing",
+      "note": "Each valid session = 1 point"
+    }
+  },
+  "evidence": {
+    "title": "Evidence Requirements",
+    "description": "For a session to be valid, you must submit proof:",
+    "types": [
+      "Photo of yourself exercising, OR",
+      "Activity log from apps/devices (Strava, Apple Watch, Garmin, etc.)"
+    ],
+    "note": "Evidence must be clear and correspond to the exercise day."
+  },
+  "prizes": {
+    "title": "Entry Fee & Prizes",
+    "entryFee": "Each participant contributes <strong>$20 USD</strong>.",
+    "distribution": "Prize distribution:",
+    "places": {
+      "first": "1st",
+      "second": "2nd",
+      "third": "3rd",
+      "fourth": "4th",
+      "fifth": "5th"
+    }
+  },
+  "spirit": {
+    "title": "Spirit of the Challenge",
+    "intro": "This challenge is NOT about negative pressure or destructive competition. Its essence is:",
+    "values": [
+      "Consistency",
+      "Self-discipline",
+      "Physical and mental health",
+      "Support among friends",
+      "Celebrating sustained effort over time"
+    ],
+    "highlight": "Any situation not covered by these rules will be resolved by group agreement, always prioritizing respect, honesty, and friendship."
+  }
+}

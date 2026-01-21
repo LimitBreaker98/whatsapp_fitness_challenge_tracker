@@ -1,39 +1,35 @@
+import { useTranslation } from 'react-i18next';
 import './RulesPage.css';
 
 export default function RulesPage() {
+  const { t } = useTranslation('rules');
+
   return (
     <div className="rules-page">
-      <h2>Challenge Rules</h2>
-      <p className="rules-subtitle">Friendly Exercise Challenge 2026</p>
+      <h2>{t('title')}</h2>
+      <p className="rules-subtitle">{t('subtitle')}</p>
 
       <section className="rules-section purpose-section">
         <div className="section-icon">🎯</div>
         <div className="section-content">
-          <h3>Purpose</h3>
-          <p>
-            A friendly exercise challenge among friends designed to promote healthy and consistent
-            physical activity, strengthen connections across borders (this is an international challenge!),
-            and nurture friendship throughout the process.
-          </p>
-          <p className="highlight">
-            The main goal is not just to compete, but to maintain discipline, health, and consistency,
-            supported by a spirit of mutual encouragement.
-          </p>
+          <h3>{t('purpose.title')}</h3>
+          <p>{t('purpose.description')}</p>
+          <p className="highlight">{t('purpose.highlight')}</p>
         </div>
       </section>
 
       <section className="rules-section duration-section">
         <div className="section-icon">📅</div>
         <div className="section-content">
-          <h3>Duration</h3>
+          <h3>{t('duration.title')}</h3>
           <div className="date-range">
             <div className="date-item">
-              <span className="date-label">Start</span>
-              <span className="date-value">Monday, January 19, 2026</span>
+              <span className="date-label">{t('duration.start')}</span>
+              <span className="date-value">{t('duration.startDate')}</span>
             </div>
             <div className="date-item">
-              <span className="date-label">End</span>
-              <span className="date-value">Wednesday, June 10, 2026</span>
+              <span className="date-label">{t('duration.end')}</span>
+              <span className="date-value">{t('duration.endDate')}</span>
             </div>
           </div>
         </div>
@@ -42,12 +38,11 @@ export default function RulesPage() {
       <section className="rules-section general-section">
         <div className="section-icon">📋</div>
         <div className="section-content">
-          <h3>General Rules</h3>
+          <h3>{t('general.title')}</h3>
           <ul>
-            <li>Each valid exercise session equals <strong>1 point</strong></li>
-            <li>Only <strong>1 point per day</strong> maximum (with exceptions below)</li>
-            <li>The challenge is based on <strong>honesty, good faith, and personal responsibility</strong></li>
-            <li>Evidence of exercise is required for points to count</li>
+            {t('general.rules', { returnObjects: true }).map((rule, i) => (
+              <li key={i} dangerouslySetInnerHTML={{ __html: rule }} />
+            ))}
           </ul>
         </div>
       </section>
@@ -55,40 +50,39 @@ export default function RulesPage() {
       <section className="rules-section exercises-section">
         <div className="section-icon">🏃</div>
         <div className="section-content">
-          <h3>Valid Exercise Types</h3>
+          <h3>{t('exercises.title')}</h3>
 
           <div className="exercise-category">
-            <h4>Running / Jogging</h4>
+            <h4>{t('exercises.running.title')}</h4>
             <ul>
-              <li>Minimum <strong>5 km</strong> = 1 point</li>
-              <li><strong>21.1 km</strong> (Half Marathon) = 2 points</li>
-              <li><strong>42.2 km</strong> (Marathon) = 4 points</li>
+              {t('exercises.running.rules', { returnObjects: true }).map((rule, i) => (
+                <li key={i} dangerouslySetInnerHTML={{ __html: rule }} />
+              ))}
             </ul>
-            <p className="note">Bonus points only apply for these specific distances.</p>
+            <p className="note">{t('exercises.running.note')}</p>
           </div>
 
           <div className="exercise-category">
-            <h4>Strength Training</h4>
-            <p>Sessions that include at least <strong>4 different strength exercises</strong>:</p>
+            <h4>{t('exercises.strength.title')}</h4>
+            <p dangerouslySetInnerHTML={{ __html: t('exercises.strength.description') }} />
             <ul>
-              <li>Weight lifting</li>
-              <li>Calisthenics</li>
-              <li>Functional training</li>
-              <li>Resistance bands or machines</li>
+              {t('exercises.strength.types', { returnObjects: true }).map((type, i) => (
+                <li key={i}>{type}</li>
+              ))}
             </ul>
-            <p className="note">Each valid session = 1 point</p>
+            <p className="note">{t('exercises.strength.note')}</p>
           </div>
 
           <div className="exercise-category">
-            <h4>Other Cardio / Intense Exercise</h4>
-            <p>Any exercise meeting <strong>ALL</strong> of these conditions:</p>
+            <h4>{t('exercises.cardio.title')}</h4>
+            <p dangerouslySetInnerHTML={{ __html: t('exercises.cardio.description') }} />
             <ul>
-              <li>Minimum <strong>30 minutes</strong> duration</li>
-              <li>Average heart rate of <strong>120+ bpm</strong></li>
-              <li>Sustained physical effort</li>
+              {t('exercises.cardio.conditions', { returnObjects: true }).map((condition, i) => (
+                <li key={i} dangerouslySetInnerHTML={{ __html: condition }} />
+              ))}
             </ul>
-            <p className="examples">Examples: Cycling, Swimming, Elliptical, Group classes (Spinning, HIIT), Skiing</p>
-            <p className="note">Each valid session = 1 point</p>
+            <p className="examples">{t('exercises.cardio.examples')}</p>
+            <p className="note">{t('exercises.cardio.note')}</p>
           </div>
         </div>
       </section>
@@ -96,41 +90,42 @@ export default function RulesPage() {
       <section className="rules-section evidence-section">
         <div className="section-icon">📸</div>
         <div className="section-content">
-          <h3>Evidence Requirements</h3>
-          <p>For a session to be valid, you must submit proof:</p>
+          <h3>{t('evidence.title')}</h3>
+          <p>{t('evidence.description')}</p>
           <ul>
-            <li>Photo of yourself exercising, OR</li>
-            <li>Activity log from apps/devices (Strava, Apple Watch, Garmin, etc.)</li>
+            {t('evidence.types', { returnObjects: true }).map((type, i) => (
+              <li key={i}>{type}</li>
+            ))}
           </ul>
-          <p className="note">Evidence must be clear and correspond to the exercise day.</p>
+          <p className="note">{t('evidence.note')}</p>
         </div>
       </section>
 
       <section className="rules-section prizes-section">
         <div className="section-icon">💰</div>
         <div className="section-content">
-          <h3>Entry Fee &amp; Prizes</h3>
-          <p>Each participant contributes <strong>$20 USD</strong>.</p>
-          <p>Prize distribution:</p>
+          <h3>{t('prizes.title')}</h3>
+          <p dangerouslySetInnerHTML={{ __html: t('prizes.entryFee') }} />
+          <p>{t('prizes.distribution')}</p>
           <div className="prize-list">
             <div className="prize-item gold">
-              <span className="place">1st</span>
+              <span className="place">{t('prizes.places.first')}</span>
               <span className="percent">50%</span>
             </div>
             <div className="prize-item silver">
-              <span className="place">2nd</span>
+              <span className="place">{t('prizes.places.second')}</span>
               <span className="percent">35%</span>
             </div>
             <div className="prize-item bronze">
-              <span className="place">3rd</span>
+              <span className="place">{t('prizes.places.third')}</span>
               <span className="percent">10%</span>
             </div>
             <div className="prize-item">
-              <span className="place">4th</span>
+              <span className="place">{t('prizes.places.fourth')}</span>
               <span className="percent">5%</span>
             </div>
             <div className="prize-item">
-              <span className="place">5th</span>
+              <span className="place">{t('prizes.places.fifth')}</span>
               <span className="percent">0%</span>
             </div>
           </div>
@@ -140,19 +135,14 @@ export default function RulesPage() {
       <section className="rules-section spirit-section">
         <div className="section-icon">💪</div>
         <div className="section-content">
-          <h3>Spirit of the Challenge</h3>
-          <p>This challenge is NOT about negative pressure or destructive competition. Its essence is:</p>
+          <h3>{t('spirit.title')}</h3>
+          <p>{t('spirit.intro')}</p>
           <ul className="spirit-list">
-            <li>Consistency</li>
-            <li>Self-discipline</li>
-            <li>Physical and mental health</li>
-            <li>Support among friends</li>
-            <li>Celebrating sustained effort over time</li>
+            {t('spirit.values', { returnObjects: true }).map((value, i) => (
+              <li key={i}>{value}</li>
+            ))}
           </ul>
-          <p className="highlight">
-            Any situation not covered by these rules will be resolved by group agreement,
-            always prioritizing respect, honesty, and friendship.
-          </p>
+          <p className="highlight">{t('spirit.highlight')}</p>
         </div>
       </section>
     </div>

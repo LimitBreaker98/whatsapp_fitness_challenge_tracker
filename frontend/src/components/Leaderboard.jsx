@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { fetchLatest, fetchScores } from '../api';
 import './Leaderboard.css';
 
@@ -34,6 +35,8 @@ function calculateStreaks(entries) {
 }
 
 export default function Leaderboard() {
+  const { t } = useTranslation('leaderboard');
+  const { t: tCommon } = useTranslation('common');
   const [data, setData] = useState(null);
   const [maxScore, setMaxScore] = useState(0);
   const [newPlayers, setNewPlayers] = useState(new Set());
@@ -87,10 +90,10 @@ export default function Leaderboard() {
     loadData();
   }, []);
 
-  if (loading) return <div className="leaderboard">Loading...</div>;
-  if (error) return <div className="leaderboard error">Error: {error}</div>;
+  if (loading) return <div className="leaderboard">{tCommon('loading')}</div>;
+  if (error) return <div className="leaderboard error">{tCommon('error', { message: error })}</div>;
   if (!data || !data.date) {
-    return <div className="leaderboard empty">No data yet</div>;
+    return <div className="leaderboard empty">{tCommon('noData')}</div>;
   }
 
   // Sort players by score descending
@@ -113,18 +116,18 @@ export default function Leaderboard() {
 
   return (
     <div className="leaderboard">
-      <h2>Leaderboard</h2>
-      <p className="date">Last update: {data.date}</p>
+      <h2>{t('title')}</h2>
+      <p className="date">{t('lastUpdate', { date: data.date })}</p>
 
       <div className="players">
         {/* Column headers */}
         <div className="header-row">
-          <div className="header-cell">Rank</div>
-          <div className="header-cell">Name</div>
-          <div className="header-cell">Score</div>
-          <div className="header-cell">Δ</div>
-          <div className="header-cell">Streak</div>
-          <div className="header-cell">Pts Behind</div>
+          <div className="header-cell">{t('columns.rank')}</div>
+          <div className="header-cell">{t('columns.name')}</div>
+          <div className="header-cell">{t('columns.score')}</div>
+          <div className="header-cell">{t('columns.delta')}</div>
+          <div className="header-cell">{t('columns.streak')}</div>
+          <div className="header-cell">{t('columns.ptsBehind')}</div>
         </div>
 
         {sortedPlayers.map(([name, score], index) => {
@@ -141,7 +144,7 @@ export default function Leaderboard() {
               <div className="score">{score}</div>
               <div className="delta-cell">
                 {isNewPlayer ? (
-                  <span className="welcome-badge">Welcome!</span>
+                  <span className="welcome-badge">{t('welcome')}</span>
                 ) : dailyGain >= 4 ? (
                   <span className="gain-badge gain-epic">+{dailyGain}</span>
                 ) : dailyGain >= 2 ? (
@@ -151,10 +154,10 @@ export default function Leaderboard() {
                 ) : null}
               </div>
               <div className="streak">
-                {streak >= 2 ? `${streak}🔥` : '—'}
+                {streak >= 2 ? `${streak}🔥` : t('noStreak')}
               </div>
               <div className="pts-behind">
-                {rank === 1 ? '—' : ptsBehind}
+                {rank === 1 ? t('leader') : ptsBehind}
               </div>
             </div>
           );

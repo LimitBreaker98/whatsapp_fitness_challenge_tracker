@@ -1,0 +1,15 @@
+{
+  "title": "Clasificación",
+  "lastUpdate": "Última actualización: {{date}}",
+  "columns": {
+    "rank": "Pos",
+    "name": "Nombre",
+    "score": "Puntos",
+    "delta": "Delta",
+    "streak": "Racha",
+    "ptsBehind": "Dif. Líder"
+  },
+  "welcome": "Bienvenido!",
+  "noStreak": "—",
+  "leader": "—"
+}

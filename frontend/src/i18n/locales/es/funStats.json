@@ -1,0 +1,32 @@
+{
+  "prizePool": {
+    "title": "Premio Acumulado",
+    "detail": "{{count}} jugadores x ${{amount}}"
+  },
+  "payoutSplit": {
+    "title": "Distribución de Premios"
+  },
+  "hotStreak": {
+    "title": "Racha Caliente",
+    "message": "{{player}} lleva una racha de {{count}} días!",
+    "empty": "Sin rachas activas aún"
+  },
+  "mostConsistent": {
+    "title": "Más Consistente",
+    "nickname": "\"La Máquina\"",
+    "avgGain": "Prom {{value}} pts/día",
+    "empty": "Faltan más datos..."
+  },
+  "rivalryWatch": {
+    "title": "Rivalidades",
+    "gap": "{{gap}} pts de diferencia!",
+    "empty": "Sin batallas cerradas ahora"
+  },
+  "slackerAlert": {
+    "title": "Alerta de Flojera",
+    "message_one": "{{player}} no ha anotado en {{count}} día...",
+    "message_other": "{{player}} no ha anotado en {{count}} días...",
+    "detail": "Es hora de moverse!",
+    "empty": "Todos están trabajando duro!"
+  }
+}

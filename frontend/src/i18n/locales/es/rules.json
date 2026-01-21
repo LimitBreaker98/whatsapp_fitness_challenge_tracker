@@ -1,0 +1,92 @@
+{
+  "title": "Reglas del Reto",
+  "subtitle": "Reto Amistoso de Ejercicio 2026",
+  "purpose": {
+    "title": "Propósito",
+    "description": "Un reto amistoso de ejercicio entre amigos diseñado para promover actividad física saludable y consistente, fortalecer conexiones a través de fronteras (este es un reto internacional!), y cultivar la amistad durante todo el proceso.",
+    "highlight": "El objetivo principal no es solo competir, sino mantener disciplina, salud y consistencia, apoyados por un espíritu de aliento mutuo."
+  },
+  "duration": {
+    "title": "Duración",
+    "start": "Inicio",
+    "startDate": "Lunes, 19 de Enero de 2026",
+    "end": "Fin",
+    "endDate": "Miércoles, 10 de Junio de 2026"
+  },
+  "general": {
+    "title": "Reglas Generales",
+    "rules": [
+      "Cada sesión de ejercicio válida equivale a <strong>1 punto</strong>",
+      "Solo <strong>1 punto por día</strong> máximo (con excepciones abajo)",
+      "El reto se basa en <strong>honestidad, buena fe y responsabilidad personal</strong>",
+      "Se requiere evidencia del ejercicio para que los puntos cuenten"
+    ]
+  },
+  "exercises": {
+    "title": "Tipos de Ejercicio Válidos",
+    "running": {
+      "title": "Correr / Trotar",
+      "rules": [
+        "Mínimo <strong>5 km</strong> = 1 punto",
+        "<strong>21.1 km</strong> (Media Maratón) = 2 puntos",
+        "<strong>42.2 km</strong> (Maratón) = 4 puntos"
+      ],
+      "note": "Los puntos extra solo aplican para estas distancias específicas."
+    },
+    "strength": {
+      "title": "Entrenamiento de Fuerza",
+      "description": "Sesiones que incluyan al menos <strong>4 ejercicios de fuerza diferentes</strong>:",
+      "types": [
+        "Levantamiento de pesas",
+        "Calistenia",
+        "Entrenamiento funcional",
+        "Bandas de resistencia o máquinas"
+      ],
+      "note": "Cada sesión válida = 1 punto"
+    },
+    "cardio": {
+      "title": "Otro Cardio / Ejercicio Intenso",
+      "description": "Cualquier ejercicio que cumpla <strong>TODAS</strong> estas condiciones:",
+      "conditions": [
+        "Mínimo <strong>30 minutos</strong> de duración",
+        "Ritmo cardíaco promedio de <strong>120+ ppm</strong>",
+        "Esfuerzo físico sostenido"
+      ],
+      "examples": "Ejemplos: Ciclismo, Natación, Elíptica, Clases grupales (Spinning, HIIT), Esquí",
+      "note": "Cada sesión válida = 1 punto"
+    }
+  },
+  "evidence": {
+    "title": "Requisitos de Evidencia",
+    "description": "Para que una sesión sea válida, debes enviar prueba:",
+    "types": [
+      "Foto de ti haciendo ejercicio, O",
+      "Registro de actividad de apps/dispositivos (Strava, Apple Watch, Garmin, etc.)"
+    ],
+    "note": "La evidencia debe ser clara y corresponder al día del ejercicio."
+  },
+  "prizes": {
+    "title": "Cuota de Entrada y Premios",
+    "entryFee": "Cada participante contribuye <strong>$20 USD</strong>.",
+    "distribution": "Distribución de premios:",
+    "places": {
+      "first": "1ro",
+      "second": "2do",
+      "third": "3ro",
+      "fourth": "4to",
+      "fifth": "5to"
+    }
+  },
+  "spirit": {
+    "title": "Espíritu del Reto",
+    "intro": "Este reto NO se trata de presión negativa o competencia destructiva. Su esencia es:",
+    "values": [
+      "Consistencia",
+      "Autodisciplina",
+      "Salud física y mental",
+      "Apoyo entre amigos",
+      "Celebrar el esfuerzo sostenido en el tiempo"
+    ],
+    "highlight": "Cualquier situación no cubierta por estas reglas será resuelta por acuerdo grupal, siempre priorizando el respeto, la honestidad y la amistad."
+  }
+}

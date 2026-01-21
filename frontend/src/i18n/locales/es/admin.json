@@ -1,0 +1,27 @@
+{
+  "login": {
+    "title": "Inicio de Sesión Admin",
+    "instructions": "Ingresa tu clave API para acceder al panel de administración.",
+    "placeholder": "Ingresa clave API...",
+    "button": "Entrar"
+  },
+  "submit": {
+    "title": "Enviar Actualización Diaria",
+    "logout": "Salir",
+    "instructions": "Pega el mensaje de puntuación diaria abajo. Formato:",
+    "placeholder": "Pega la actualización diaria aquí...",
+    "button": "Enviar Actualización",
+    "submitting": "Enviando..."
+  },
+  "errors": {
+    "emptyMessage": "Por favor ingresa un mensaje",
+    "apiKeyRequired": "Clave API requerida (agrega ?key=xxx a la URL)"
+  },
+  "confirmation": {
+    "exists": "Ya existe una entrada para {{date}}.",
+    "overwrite": "Deseas sobrescribirla?",
+    "yesOverwrite": "Sí, Sobrescribir",
+    "overwriting": "Sobrescribiendo...",
+    "cancel": "Cancelar"
+  }
+}

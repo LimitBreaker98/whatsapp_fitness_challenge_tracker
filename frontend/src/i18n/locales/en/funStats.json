@@ -1,0 +1,32 @@
+{
+  "prizePool": {
+    "title": "Prize Pool",
+    "detail": "{{count}} players x ${{amount}}"
+  },
+  "payoutSplit": {
+    "title": "Payout Split"
+  },
+  "hotStreak": {
+    "title": "Hot Streak",
+    "message": "{{player}} is on a {{count}}-day streak!",
+    "empty": "No active streaks yet"
+  },
+  "mostConsistent": {
+    "title": "Most Consistent",
+    "nickname": "\"The Machine\"",
+    "avgGain": "Avg {{value}} pts/day",
+    "empty": "Need more data..."
+  },
+  "rivalryWatch": {
+    "title": "Rivalry Watch",
+    "gap": "{{gap}} pts apart!",
+    "empty": "No close battles right now"
+  },
+  "slackerAlert": {
+    "title": "Slacker Alert",
+    "message_one": "{{player}} hasn't scored in {{count}} day...",
+    "message_other": "{{player}} hasn't scored in {{count}} days...",
+    "detail": "Time to get moving!",
+    "empty": "Everyone's putting in work!"
+  }
+}

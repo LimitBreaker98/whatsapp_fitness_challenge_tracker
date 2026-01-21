@@ -1,0 +1,24 @@
+{
+  "title": "Progreso de Puntos",
+  "showing": "Mostrando: {{player}}",
+  "clickToReset": "(clic para restablecer)",
+  "hint": "Haz clic en una línea para resaltar",
+  "axisLabels": {
+    "date": "Fecha",
+    "score": "Puntuación Acumulada"
+  },
+  "months": {
+    "jan": "Ene",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Abr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Ago",
+    "sep": "Sep",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Dic"
+  }
+}
