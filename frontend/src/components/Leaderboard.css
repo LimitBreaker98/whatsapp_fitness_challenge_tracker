@@ -344,7 +344,7 @@
   }
 
   .header-row {
-    grid-template-columns: 32px 1fr 40px auto;
+    grid-template-columns: 32px 1fr 45px 55px;
     gap: 0.5rem;
     padding: 0.4rem 0.75rem;
   }
@@ -356,7 +356,7 @@
   }
 
   .player-row {
-    grid-template-columns: 32px 1fr 40px auto;
+    grid-template-columns: 32px 1fr 45px 55px;
     gap: 0.5rem;
     padding: 0.6rem 0.75rem;
   }
