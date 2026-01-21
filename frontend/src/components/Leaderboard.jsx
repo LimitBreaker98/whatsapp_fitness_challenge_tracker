@@ -2,20 +2,6 @@ import { useState, useEffect } from 'react';
 import { fetchLatest, fetchScores } from '../api';
 import './Leaderboard.css';
 
-// Calculate ranks with ties from a scores object
-function calculateRanks(scores) {
-  const sorted = Object.entries(scores).sort(([, a], [, b]) => b - a);
-  const rankMap = {};
-  let currentRank = 1;
-  for (let i = 0; i < sorted.length; i++) {
-    if (i > 0 && sorted[i][1] < sorted[i - 1][1]) {
-      currentRank = i + 1;
-    }
-    rankMap[sorted[i][0]] = currentRank;
-  }
-  return rankMap;
-}
-
 // Calculate streak (consecutive days with gains > 0)
 function calculateStreaks(entries) {
   const streaks = {};
@@ -46,7 +32,6 @@ export default function Leaderboard() {
   const [data, setData] = useState(null);
   const [maxScore, setMaxScore] = useState(0);
   const [newPlayers, setNewPlayers] = useState(new Set());
-  const [yesterdayRanks, setYesterdayRanks] = useState({});
   const [streaks, setStreaks] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -80,20 +65,12 @@ export default function Leaderboard() {
           }
         }
 
-        // Calculate yesterday's ranks for trend
-        let prevRanks = {};
-        if (entries.length >= 2) {
-          const yesterdayEntry = entries[entries.length - 2];
-          prevRanks = calculateRanks(yesterdayEntry.scores);
-        }
-
         // Calculate streaks
         const playerStreaks = calculateStreaks(entries);
 
         setData(latest);
         setMaxScore(max);
         setNewPlayers(newPlayerSet);
-        setYesterdayRanks(prevRanks);
         setStreaks(playerStreaks);
       } catch (err) {
         setError(err.message);
@@ -129,21 +106,6 @@ export default function Leaderboard() {
   // Get leader score for pts behind calculation
   const leaderScore = sortedPlayers.length > 0 ? sortedPlayers[0][1] : 0;
 
-  // Helper to get trend info
-  const getTrend = (name, currentRank) => {
-    const prevRank = yesterdayRanks[name];
-    if (prevRank === undefined) {
-      return { arrow: '→', className: 'trend-same', diff: 0 };
-    }
-    const diff = prevRank - currentRank;
-    if (diff > 0) {
-      return { arrow: '↗', className: 'trend-up', diff };
-    } else if (diff < 0) {
-      return { arrow: '↘', className: 'trend-down', diff: Math.abs(diff) };
-    }
-    return { arrow: '→', className: 'trend-same', diff: 0 };
-  };
-
   return (
     <div className="leaderboard">
       <h2>Leaderboard</h2>
@@ -155,9 +117,8 @@ export default function Leaderboard() {
           <div className="header-cell">Rank</div>
           <div className="header-cell">Name</div>
           <div className="header-cell">Score</div>
-          <div className="header-cell">Trend</div>
-          <div className="header-cell">Streak</div>
           <div className="header-cell">Δ</div>
+          <div className="header-cell">Streak</div>
           <div className="header-cell">Pts Behind</div>
         </div>
 
@@ -165,8 +126,7 @@ export default function Leaderboard() {
           const dailyGain = data.daily_gains[name] || 0;
           const rank = ranks[index];
           const isNewPlayer = newPlayers.has(name);
-          const ptsBehind = score - leaderScore;
-          const trend = getTrend(name, rank);
+          const ptsBehind = leaderScore - score;
           const streak = streaks[name] || 0;
 
           return (
@@ -174,13 +134,6 @@ export default function Leaderboard() {
               <div className="rank">#{rank}</div>
               <div className="name">{name}</div>
               <div className="score">{score}</div>
-              <div className={`trend-badge ${trend.className}`}>
-                {trend.arrow}
-                {trend.diff > 0 && trend.diff}
-              </div>
-              <div className="streak">
-                {streak >= 2 ? `${streak}🔥` : '—'}
-              </div>
               <div className="delta-cell">
                 {isNewPlayer ? (
                   <span className="welcome-badge">Welcome!</span>
@@ -191,6 +144,9 @@ export default function Leaderboard() {
                 ) : dailyGain > 0 ? (
                   <span className="gain-badge">+{dailyGain}</span>
                 ) : null}
+              </div>
+              <div className="streak">
+                {streak >= 2 ? `${streak}🔥` : '—'}
               </div>
               <div className="pts-behind">
                 {rank === 1 ? '—' : ptsBehind}
