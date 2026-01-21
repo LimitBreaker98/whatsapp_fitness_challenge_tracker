@@ -5,6 +5,7 @@ import './Leaderboard.css';
 export default function Leaderboard() {
   const [data, setData] = useState(null);
   const [maxScore, setMaxScore] = useState(0);
+  const [newPlayers, setNewPlayers] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -22,8 +23,24 @@ export default function Leaderboard() {
         );
         const max = Math.max(...allScoreValues, 1);
 
+        // Find new players (only appear in the latest entry)
+        const entries = allScores.entries;
+        const newPlayerSet = new Set();
+        if (entries.length >= 1) {
+          const latestPlayers = Object.keys(entries[entries.length - 1].scores);
+          const previousPlayers = new Set(
+            entries.slice(0, -1).flatMap((e) => Object.keys(e.scores))
+          );
+          for (const player of latestPlayers) {
+            if (!previousPlayers.has(player)) {
+              newPlayerSet.add(player);
+            }
+          }
+        }
+
         setData(latest);
         setMaxScore(max);
+        setNewPlayers(newPlayerSet);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -65,7 +82,7 @@ export default function Leaderboard() {
           const dailyGain = data.daily_gains[name] || 0;
           const gainWidth = (dailyGain / maxScore) * 100;
           const rank = ranks[index];
-          const isNewPlayer = score === dailyGain && dailyGain > 0;
+          const isNewPlayer = newPlayers.has(name);
 
           return (
             <div key={name} className={`player-row rank-${rank}`}>
