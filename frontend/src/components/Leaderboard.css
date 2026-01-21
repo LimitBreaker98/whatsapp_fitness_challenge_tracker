@@ -339,6 +339,8 @@
 @media (max-width: 500px) {
   .leaderboard {
     padding: 1rem;
+    max-width: 100%;
+    border-radius: 0;
   }
 
   .header-row {

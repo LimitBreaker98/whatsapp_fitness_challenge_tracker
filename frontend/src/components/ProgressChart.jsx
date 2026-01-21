@@ -126,11 +126,13 @@ export default function ProgressChart() {
       type: 'category',
       tickangle: -45,
       tickfont: { size: 11 },
+      fixedrange: true,
     },
     yaxis: {
       title: 'Cumulative Score',
       tickfont: { size: 11 },
       range: [0, yAxisMax],
+      fixedrange: true,
     },
     legend: {
       orientation: 'h',
@@ -147,6 +149,7 @@ export default function ProgressChart() {
   const config = {
     responsive: true,
     displayModeBar: false,
+    scrollZoom: false,
   };
 
   const handleClick = (event) => {
