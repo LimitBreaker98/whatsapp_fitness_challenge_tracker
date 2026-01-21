@@ -1,11 +1,11 @@
 .app {
   min-height: 100vh;
-  background: #fafafa;
+  background: var(--color-bg);
 }
 
 header {
-  background: #1a1a1a;
-  color: white;
+  background: var(--color-header-bg);
+  color: var(--color-header-text);
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -21,17 +21,18 @@ header h1 {
 header nav {
   display: flex;
   gap: 1.5rem;
+  align-items: center;
 }
 
 header nav a {
-  color: #aaa;
+  color: var(--color-header-link);
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s;
 }
 
 header nav a:hover {
-  color: white;
+  color: var(--color-header-link-hover);
 }
 
 main {

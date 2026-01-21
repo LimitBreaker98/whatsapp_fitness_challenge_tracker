@@ -6,11 +6,11 @@
 .rules-page h2 {
   margin: 0 0 0.25rem 0;
   font-size: 1.75rem;
-  color: #1a1a1a;
+  color: var(--color-text);
 }
 
 .rules-subtitle {
-  color: #666;
+  color: var(--color-text-muted);
   font-size: 1rem;
   margin: 0 0 2rem 0;
 }
@@ -20,9 +20,9 @@
   gap: 1rem;
   padding: 1.5rem;
   margin-bottom: 1rem;
-  background: white;
+  background: var(--color-bg-card);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px var(--color-shadow), 0 1px 2px var(--color-shadow-light);
 }
 
 .section-icon {
@@ -40,19 +40,19 @@
   margin: 0 0 0.75rem 0;
   font-size: 1.1rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--color-text);
 }
 
 .section-content p {
   margin: 0 0 0.5rem 0;
-  color: #444;
+  color: var(--color-text-secondary);
   line-height: 1.5;
 }
 
 .section-content ul {
   margin: 0.5rem 0;
   padding-left: 1.25rem;
-  color: #444;
+  color: var(--color-text-secondary);
 }
 
 .section-content li {
@@ -61,18 +61,18 @@
 }
 
 .section-content strong {
-  color: #1a1a1a;
+  color: var(--color-text);
   font-weight: 600;
 }
 
 .highlight {
-  background: #f0fdf4;
-  border-left: 3px solid #22c55e;
+  background: var(--color-highlight-bg);
+  border-left: 3px solid var(--color-highlight-border);
   padding: 0.75rem 1rem;
   margin-top: 0.75rem;
   border-radius: 0 8px 8px 0;
   font-style: italic;
-  color: #166534;
+  color: var(--color-highlight-text);
 }
 
 /* Purpose section */
@@ -100,14 +100,14 @@
 .date-label {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #888;
+  color: var(--color-text-subtle);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .date-value {
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--color-text);
 }
 
 /* General rules section */
@@ -123,7 +123,7 @@
 .exercise-category {
   margin-bottom: 1.25rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .exercise-category:last-child {
@@ -141,14 +141,14 @@
 
 .note {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--color-text-muted);
   font-style: italic;
   margin-top: 0.5rem;
 }
 
 .examples {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--color-text-muted);
   margin-top: 0.5rem;
 }
 
@@ -174,7 +174,7 @@
   flex-direction: column;
   align-items: center;
   padding: 0.5rem 1rem;
-  background: #f5f5f5;
+  background: var(--color-prize-bg);
   border-radius: 8px;
   min-width: 60px;
 }
@@ -182,13 +182,13 @@
 .prize-item .place {
   font-size: 0.75rem;
   font-weight: 600;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .prize-item .percent {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: var(--color-text);
 }
 
 .prize-item.gold {
@@ -231,7 +231,7 @@
 }
 
 .spirit-list li::before {
-  content: '✓';
+  content: '\2713';
   position: absolute;
   left: 0;
   color: #ec4899;

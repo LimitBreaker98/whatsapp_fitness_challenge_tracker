@@ -1,20 +1,20 @@
 .progress-chart {
   padding: 1.5rem;
   width: 100%;
-  background: white;
+  background: var(--color-bg-card);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px var(--color-shadow), 0 1px 2px var(--color-shadow-light);
 }
 
 .progress-chart.empty,
 .progress-chart.error {
   text-align: center;
   padding: 3rem;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .progress-chart.error {
-  color: #dc3545;
+  color: var(--color-error);
 }
 
 .chart-header {
@@ -30,24 +30,24 @@
 .chart-header h3 {
   margin: 0;
   font-size: 1.25rem;
-  color: #1a1a1a;
+  color: var(--color-text);
   flex-shrink: 0;
 }
 
 .chart-header .active-hint {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--color-text-muted);
   text-align: right;
   flex-shrink: 1;
   min-width: 0;
 }
 
 .chart-header .active-hint span {
-  color: #999;
+  color: var(--color-text-subtle);
 }
 
 .chart-header .hint-muted {
-  color: #aaa;
+  color: var(--color-text-placeholder);
   font-style: italic;
 }
 

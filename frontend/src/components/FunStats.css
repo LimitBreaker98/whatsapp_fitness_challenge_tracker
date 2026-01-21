@@ -16,15 +16,15 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 1.25rem;
-  background: white;
+  background: var(--color-bg-card);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px var(--color-shadow), 0 1px 2px var(--color-shadow-light);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .fun-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px var(--color-shadow-hover), 0 2px 4px var(--color-shadow);
 }
 
 .fun-card-icon {
@@ -42,7 +42,7 @@
   margin: 0 0 0.5rem 0;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #666;
+  color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -50,7 +50,7 @@
 .fun-card-content p {
   margin: 0;
   font-size: 1rem;
-  color: #1a1a1a;
+  color: var(--color-text);
   line-height: 1.4;
 }
 
@@ -66,7 +66,7 @@
   display: block;
   margin-top: 0.35rem;
   font-size: 0.8rem;
-  color: #888;
+  color: var(--color-text-subtle);
 }
 
 /* Streak card */
@@ -93,15 +93,15 @@
 }
 
 .rivalry-card .fun-card-content strong {
-  color: #1a1a1a;
+  color: var(--color-text);
 }
 
 .rivalry-gap {
   display: inline-block;
   margin-left: 0.5rem;
   padding: 0.15rem 0.5rem;
-  background: #fef2f2;
-  color: #dc2626;
+  background: var(--color-rivalry-bg);
+  color: var(--color-rivalry-text);
   font-size: 0.75rem;
   font-weight: 600;
   border-radius: 4px;
@@ -118,7 +118,7 @@
 
 /* Empty state */
 .empty-state {
-  color: #aaa;
+  color: var(--color-text-placeholder);
   font-style: italic;
 }
 
@@ -144,7 +144,7 @@
 .pot-card .big-number {
   font-size: 1.75rem;
   font-weight: 800;
-  color: #16a34a;
+  color: var(--color-success-dark);
   margin: 0;
   line-height: 1.2;
 }
@@ -169,14 +169,14 @@
 
 .dist-place {
   width: 20px;
-  color: #888;
+  color: var(--color-text-subtle);
   font-weight: 600;
 }
 
 .dist-bar-bg {
   flex: 1;
   height: 8px;
-  background: #f0f0f0;
+  background: var(--color-dist-bar-bg);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -191,7 +191,7 @@
   width: 28px;
   text-align: right;
   font-weight: 600;
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 /* Mobile responsiveness */

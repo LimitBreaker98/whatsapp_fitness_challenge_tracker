@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Plot from 'react-plotly.js';
 import { fetchScores } from '../api';
+import { useTheme } from '../context/ThemeContext';
 import './ProgressChart.css';
 
 const COLORS = [
@@ -26,15 +27,20 @@ const MARKERS = [
   'cross',
 ];
 
-const INACTIVE_COLOR = '#d1d5db';
+const INACTIVE_COLOR_LIGHT = '#d1d5db';
+const INACTIVE_COLOR_DARK = '#4b5563';
 
 export default function ProgressChart() {
   const { t } = useTranslation('progressChart');
   const { t: tCommon } = useTranslation('common');
+  const { theme } = useTheme();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activePlayer, setActivePlayer] = useState(null);
+
+  const isDark = theme === 'dark';
+  const INACTIVE_COLOR = isDark ? INACTIVE_COLOR_DARK : INACTIVE_COLOR_LIGHT;
 
   // Get month names from translations
   const MONTH_SHORT = [
@@ -121,33 +127,44 @@ export default function ProgressChart() {
     };
   });
 
+  // Theme-aware colors for Plotly
+  const textColor = isDark ? '#e5e5e5' : '#1a1a1a';
+  const gridColor = isDark ? '#333' : '#e5e5e5';
+  const plotBgColor = isDark ? '#1a1a1a' : '#fafafa';
+  const paperBgColor = isDark ? '#1a1a1a' : 'white';
+
   const layout = {
     title: {
       text: t('title'),
-      font: { size: 20, color: '#1a1a1a' },
+      font: { size: 20, color: textColor },
     },
     xaxis: {
-      title: t('axisLabels.date'),
+      title: { text: t('axisLabels.date'), font: { color: textColor } },
       type: 'category',
       tickangle: -45,
-      tickfont: { size: 11 },
+      tickfont: { size: 11, color: textColor },
       fixedrange: true,
+      gridcolor: gridColor,
+      linecolor: gridColor,
     },
     yaxis: {
-      title: t('axisLabels.score'),
-      tickfont: { size: 11 },
+      title: { text: t('axisLabels.score'), font: { color: textColor } },
+      tickfont: { size: 11, color: textColor },
       range: [0, yAxisMax],
       fixedrange: true,
+      gridcolor: gridColor,
+      linecolor: gridColor,
     },
     legend: {
       orientation: 'h',
       y: -0.35,
       x: 0.5,
       xanchor: 'center',
+      font: { color: textColor },
     },
     hovermode: 'x unified',
-    plot_bgcolor: '#fafafa',
-    paper_bgcolor: 'white',
+    plot_bgcolor: plotBgColor,
+    paper_bgcolor: paperBgColor,
     margin: { t: 20, r: 30, b: 130, l: 60 },
   };
 

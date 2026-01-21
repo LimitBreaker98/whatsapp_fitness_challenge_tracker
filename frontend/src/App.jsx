@@ -6,6 +6,7 @@ import ProgressChart from './components/ProgressChart';
 import AdminPage from './components/AdminPage';
 import RulesPage from './components/RulesPage';
 import LanguageToggle from './components/LanguageToggle';
+import ThemeToggle from './components/ThemeToggle';
 import './App.css';
 
 function Dashboard() {
@@ -31,6 +32,7 @@ function App() {
             <Link to="/rules">{t('nav.rules')}</Link>
             <Link to="/admin">{t('nav.admin')}</Link>
             <LanguageToggle />
+            <ThemeToggle />
           </nav>
         </header>
 

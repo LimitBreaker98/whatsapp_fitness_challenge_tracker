@@ -1,19 +1,21 @@
 .language-toggle {
-  background: #f0f0f0;
-  border: 1px solid #ccc;
+  background: transparent;
+  border: 1px solid var(--color-border);
   border-radius: 4px;
   padding: 6px 12px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s;
+  color: var(--color-header-link);
 }
 
 .language-toggle:hover {
-  background: #e0e0e0;
-  border-color: #aaa;
+  background: var(--color-bg-hover);
+  border-color: var(--color-border-hover);
+  color: var(--color-header-link-hover);
 }
 
 .language-toggle:active {
-  background: #d0d0d0;
+  opacity: 0.8;
 }
