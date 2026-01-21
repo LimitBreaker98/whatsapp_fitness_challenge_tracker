@@ -13,10 +13,15 @@ function calculateStreaks(entries) {
 
   for (const player of players) {
     let streak = 0;
-    // Go backwards through entries
+    // Go backwards through entries, computing gains by comparing to previous entry
     for (let i = entries.length - 1; i >= 0; i--) {
       const entry = entries[i];
-      const gain = entry.daily_gains?.[player] || 0;
+      const currentScore = entry.scores[player];
+      const prevScore = i > 0 ? entries[i - 1].scores[player] : undefined;
+
+      // Calculate gain: current - previous (or 0 if no previous entry for this player)
+      const gain = prevScore !== undefined ? currentScore - prevScore : 0;
+
       if (gain > 0) {
         streak++;
       } else {
