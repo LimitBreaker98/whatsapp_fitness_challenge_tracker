@@ -22,8 +22,9 @@
 
   --color-header-bg: #1a1a1a;
   --color-header-text: white;
-  --color-header-link: #aaa;
+  --color-header-link: #f0f0f0;
   --color-header-link-hover: white;
+  --color-header-border: rgba(255, 255, 255, 0.55);
 
   --color-shadow: rgba(0, 0, 0, 0.08);
   --color-shadow-light: rgba(0, 0, 0, 0.04);
@@ -78,11 +79,11 @@
   --color-bg-tertiary: #2a2a2a;
   --color-bg-hover: #333;
 
-  --color-text: #e5e5e5;
-  --color-text-secondary: #c0c0c0;
-  --color-text-muted: #999;
-  --color-text-subtle: #777;
-  --color-text-placeholder: #666;
+  --color-text: #f2f2f2;
+  --color-text-secondary: #d9d9d9;
+  --color-text-muted: #bdbdbd;
+  --color-text-subtle: #a6a6a6;
+  --color-text-placeholder: #8a8a8a;
 
   --color-border: #333;
   --color-border-hover: #555;
@@ -90,8 +91,9 @@
 
   --color-header-bg: #000;
   --color-header-text: white;
-  --color-header-link: #888;
+  --color-header-link: #f3f3f3;
   --color-header-link-hover: white;
+  --color-header-border: rgba(255, 255, 255, 0.65);
 
   --color-shadow: rgba(0, 0, 0, 0.3);
   --color-shadow-light: rgba(0, 0, 0, 0.2);
