@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { submitUpdate } from '../api';
+import { fetchLatest, submitUpdate } from '../api';
 import './AdminPage.css';
 
 const SESSION_KEY = 'admin_api_key';
+const FALLBACK_EXAMPLE = `January 18
+Pepo: 12
+Mene: 10
+Josh: 9
+Pocho: 8`;
 
 export default function AdminPage() {
   const { t } = useTranslation('admin');
@@ -13,6 +18,56 @@ export default function AdminPage() {
   const [status, setStatus] = useState(null); // { type: 'success' | 'error' | 'warning', text: string }
   const [loading, setLoading] = useState(false);
   const [pendingOverwrite, setPendingOverwrite] = useState(null); // { message, date }
+  const [latestEntry, setLatestEntry] = useState(null);
+  const [loadingExample, setLoadingExample] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadLatest() {
+      try {
+        const latest = await fetchLatest();
+        if (!isMounted) return;
+        if (latest?.date) {
+          setLatestEntry({ date: latest.date, scores: latest.scores || {} });
+        } else {
+          setLatestEntry(null);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setLatestEntry(null);
+        }
+      } finally {
+        if (isMounted) {
+          setLoadingExample(false);
+        }
+      }
+    }
+
+    loadLatest();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    const date = new Date(`${dateStr}T00:00:00`);
+    if (Number.isNaN(date.getTime())) return dateStr;
+    // Keep English month names so the backend parser accepts copy/paste.
+    return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+  };
+
+  const buildExample = () => {
+    if (!latestEntry) return '';
+    const dateLine = formatDate(latestEntry.date);
+    const scores = Object.entries(latestEntry.scores || {}).sort(
+      ([, a], [, b]) => b - a
+    );
+    const lines = [dateLine, ...scores.map(([name, score]) => `${name}: ${score}`)];
+    return lines.join('\n').trim();
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -113,12 +168,15 @@ export default function AdminPage() {
       <p className="instructions">
         {t('submit.instructions')}
       </p>
+      <div className="example-label">
+        {loadingExample
+          ? t('submit.exampleLoading')
+          : latestEntry
+            ? t('submit.exampleLabel')
+            : t('submit.exampleFallbackLabel')}
+      </div>
       <pre className="format-example">
-{`January 18
-Pepo: 12
-Mene: 10
-Josh: 9
-Pocho: 8`}
+        {loadingExample ? t('submit.exampleLoading') : buildExample() || FALLBACK_EXAMPLE}
       </pre>
 
       <form onSubmit={handleSubmit}>

@@ -9,6 +9,9 @@
     "title": "Submit Daily Update",
     "logout": "Logout",
     "instructions": "Paste the daily score message below. Format:",
+    "exampleLabel": "Example (last update)",
+    "exampleFallbackLabel": "Example (format)",
+    "exampleLoading": "Loading latest example...",
     "placeholder": "Paste daily update here...",
     "button": "Submit Update",
     "submitting": "Submitting..."

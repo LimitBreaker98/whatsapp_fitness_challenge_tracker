@@ -67,6 +67,15 @@
   margin-bottom: 0.5rem;
 }
 
+.admin-page .example-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-text-subtle);
+  margin: 0.75rem 0 0.4rem;
+}
+
 .admin-page .format-example {
   background: var(--color-bg-tertiary);
   padding: 1rem;

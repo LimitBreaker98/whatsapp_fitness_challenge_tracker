@@ -9,6 +9,9 @@
     "title": "Enviar Actualización Diaria",
     "logout": "Salir",
     "instructions": "Pega el mensaje de puntuación diaria abajo. Formato:",
+    "exampleLabel": "Ejemplo (última actualización)",
+    "exampleFallbackLabel": "Ejemplo (formato)",
+    "exampleLoading": "Cargando ejemplo reciente...",
     "placeholder": "Pega la actualización diaria aquí...",
     "button": "Enviar Actualización",
     "submitting": "Enviando..."
