@@ -131,6 +131,9 @@ def submit_update(
         )
 
     # Validate scores are non-decreasing compared to previous entry
+    # and daily gains are only 0, 1, 2, or 4 (challenge rules)
+    ALLOWED_GAINS = {0, 1, 2, 4}
+
     if latest:
         # If updating same date, compare against the entry before it
         if parsed["date"] == latest["date"]:
@@ -140,14 +143,25 @@ def submit_update(
             prev_scores = latest["scores"]
 
         decreased = []
+        invalid_gains = []
         for player, new_score in parsed["scores"].items():
-            if player in prev_scores and new_score < prev_scores[player]:
-                decreased.append(f"{player}: {prev_scores[player]} -> {new_score}")
+            if player in prev_scores:
+                gain = new_score - prev_scores[player]
+                if gain < 0:
+                    decreased.append(f"{player}: {prev_scores[player]} -> {new_score}")
+                elif gain not in ALLOWED_GAINS:
+                    invalid_gains.append(f"{player}: +{gain} (only +1, +2, +4 allowed)")
 
         if decreased:
             raise HTTPException(
                 status_code=400,
                 detail=f"Scores cannot decrease. Invalid changes: {', '.join(decreased)}",
+            )
+
+        if invalid_gains:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Invalid daily gains: {', '.join(invalid_gains)}",
             )
 
     # Check if entry already exists
