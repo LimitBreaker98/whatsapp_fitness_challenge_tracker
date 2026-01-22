@@ -3,7 +3,8 @@
   "nav": {
     "dashboard": "Dashboard",
     "rules": "Rules",
-    "admin": "Admin"
+    "admin": "Admin",
+    "historic": "Historic"
   },
   "loading": "Loading...",
   "error": "Error: {{message}}",

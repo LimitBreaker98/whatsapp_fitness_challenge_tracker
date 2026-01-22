@@ -5,6 +5,7 @@ import FunStats from './components/FunStats';
 import ProgressChart from './components/ProgressChart';
 import AdminPage from './components/AdminPage';
 import RulesPage from './components/RulesPage';
+import HistoricChallenges from './components/HistoricChallenges';
 import LanguageToggle from './components/LanguageToggle';
 import ThemeToggle from './components/ThemeToggle';
 import './App.css';
@@ -30,6 +31,7 @@ function App() {
           <nav>
             <Link to="/">{t('nav.dashboard')}</Link>
             <Link to="/rules">{t('nav.rules')}</Link>
+            <Link to="/historic">{t('nav.historic')}</Link>
             <Link to="/admin">{t('nav.admin')}</Link>
             <LanguageToggle />
             <ThemeToggle />
@@ -40,6 +42,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/rules" element={<RulesPage />} />
+            <Route path="/historic" element={<HistoricChallenges />} />
             <Route path="/admin" element={<AdminPage />} />
           </Routes>
         </main>

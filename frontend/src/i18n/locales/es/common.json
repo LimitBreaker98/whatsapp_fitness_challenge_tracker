@@ -3,7 +3,8 @@
   "nav": {
     "dashboard": "Tablero",
     "rules": "Reglas",
-    "admin": "Admin"
+    "admin": "Admin",
+    "historic": "Historico"
   },
   "loading": "Cargando...",
   "error": "Error: {{message}}",

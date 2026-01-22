@@ -9,6 +9,7 @@ import enFunStats from './locales/en/funStats.json';
 import enProgressChart from './locales/en/progressChart.json';
 import enAdmin from './locales/en/admin.json';
 import enRules from './locales/en/rules.json';
+import enHistoricChallenges from './locales/en/historicChallenges.json';
 
 import esCommon from './locales/es/common.json';
 import esLeaderboard from './locales/es/leaderboard.json';
@@ -16,6 +17,7 @@ import esFunStats from './locales/es/funStats.json';
 import esProgressChart from './locales/es/progressChart.json';
 import esAdmin from './locales/es/admin.json';
 import esRules from './locales/es/rules.json';
+import esHistoricChallenges from './locales/es/historicChallenges.json';
 
 const resources = {
   en: {
@@ -25,6 +27,7 @@ const resources = {
     progressChart: enProgressChart,
     admin: enAdmin,
     rules: enRules,
+    historicChallenges: enHistoricChallenges,
   },
   es: {
     common: esCommon,
@@ -33,6 +36,7 @@ const resources = {
     progressChart: esProgressChart,
     admin: esAdmin,
     rules: esRules,
+    historicChallenges: esHistoricChallenges,
   },
 };
 
