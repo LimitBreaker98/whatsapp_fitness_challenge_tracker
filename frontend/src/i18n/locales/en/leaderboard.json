@@ -11,5 +11,11 @@
   },
   "welcome": "Welcome!",
   "noStreak": "—",
-  "leader": "—"
+  "leader": "—",
+  "profile": {
+    "nicknameLabel": "Nickname",
+    "ageLabel": "Age",
+    "unknown": "—",
+    "missingDescription": "Profile coming soon."
+  }
 }

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Leaderboard from './components/Leaderboard';
@@ -11,11 +12,13 @@ import ThemeToggle from './components/ThemeToggle';
 import './App.css';
 
 function Dashboard() {
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+
   return (
     <div className="dashboard">
-      <Leaderboard />
+      <Leaderboard selectedPlayer={selectedPlayer} onSelectPlayer={setSelectedPlayer} />
+      <ProgressChart selectedPlayer={selectedPlayer} onSelectPlayer={setSelectedPlayer} />
       <FunStats />
-      <ProgressChart />
     </div>
   );
 }

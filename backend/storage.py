@@ -5,6 +5,8 @@ from typing import Dict, Optional
 
 DATA_DIR = Path(os.getenv("DATA_DIR", Path(__file__).parent))
 DATA_FILE = DATA_DIR / "data.json"
+PROFILES_FILE = DATA_DIR / "profiles.json"
+MAX_DESCRIPTION_LENGTH = 60
 
 
 def _get_empty_data() -> dict:
@@ -17,7 +19,36 @@ def load_data() -> dict:
         return _get_empty_data()
 
     with open(DATA_FILE, "r") as f:
-        return json.load(f)
+        data = json.load(f)
+
+    # Ensure required keys exist for older data files.
+    if "entries" not in data:
+        data["entries"] = []
+
+    return data
+
+
+def load_profiles() -> Dict[str, dict]:
+    """Load player profiles from JSON file. Returns empty dict if missing."""
+    if not PROFILES_FILE.exists():
+        return {}
+
+    with open(PROFILES_FILE, "r") as f:
+        data = json.load(f)
+
+    if not isinstance(data, dict):
+        return {}
+
+    normalized = {}
+    for name, profile in data.items():
+        if not isinstance(profile, dict):
+            continue
+        description = profile.get("description")
+        if isinstance(description, str) and len(description) > MAX_DESCRIPTION_LENGTH:
+            description = description[:MAX_DESCRIPTION_LENGTH].rstrip()
+        normalized[name] = {**profile, "description": description}
+
+    return normalized
 
 
 def save_data(data: dict) -> None:

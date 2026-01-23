@@ -30,14 +30,13 @@ const MARKERS = [
 const INACTIVE_COLOR_LIGHT = '#d1d5db';
 const INACTIVE_COLOR_DARK = '#4b5563';
 
-export default function ProgressChart() {
+export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = () => {} }) {
   const { t } = useTranslation('progressChart');
   const { t: tCommon } = useTranslation('common');
   const { theme } = useTheme();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activePlayer, setActivePlayer] = useState(null);
 
   const isDark = theme === 'dark';
   const INACTIVE_COLOR = isDark ? INACTIVE_COLOR_DARK : INACTIVE_COLOR_LIGHT;
@@ -100,7 +99,7 @@ export default function ProgressChart() {
       scores.push(entry.scores[player] ?? null);
     });
 
-    const isActive = activePlayer === null || activePlayer === player;
+    const isActive = selectedPlayer === null || selectedPlayer === player;
     const color = isActive ? COLORS[index % COLORS.length] : INACTIVE_COLOR;
 
     return {
@@ -178,14 +177,14 @@ export default function ProgressChart() {
     if (event.points && event.points.length > 0) {
       const clickedPlayer = event.points[0].data.name;
       // Toggle: if clicking the same player, deselect; otherwise select
-      setActivePlayer((prev) => (prev === clickedPlayer ? null : clickedPlayer));
+      onSelectPlayer(selectedPlayer === clickedPlayer ? null : clickedPlayer);
     }
   };
 
   const handleLegendClick = (event) => {
     const clickedPlayer = event.data[event.curveNumber].name;
     // Toggle: if clicking the same player, deselect; otherwise select
-    setActivePlayer((prev) => (prev === clickedPlayer ? null : clickedPlayer));
+    onSelectPlayer(selectedPlayer === clickedPlayer ? null : clickedPlayer);
     // Return false to prevent default Plotly legend behavior (hiding trace)
     return false;
   };
@@ -195,8 +194,8 @@ export default function ProgressChart() {
       <div className="chart-header">
         <h3>{t('title')}</h3>
         <div className="active-hint">
-          {activePlayer ? (
-            <>{t('showing', { player: activePlayer })} <span>{t('clickToReset')}</span></>
+          {selectedPlayer ? (
+            <>{t('showing', { player: selectedPlayer })} <span>{t('clickToReset')}</span></>
           ) : (
             <span className="hint-muted">{t('hint')}</span>
           )}

@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from zoneinfo import ZoneInfo
 from typing import Optional, Tuple
 from fastapi import FastAPI, HTTPException, Header
@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from parser import parse_message, ParseError
-from storage import load_data, add_entry, get_latest_entry, get_previous_entry, entry_exists
+from storage import load_data, load_profiles, add_entry, get_latest_entry, get_previous_entry, entry_exists
 
 PACIFIC_TZ = ZoneInfo("America/Los_Angeles")
 
@@ -74,6 +74,20 @@ def _is_valid_date(date_str: str) -> Tuple[bool, str]:
     return False, f"Date {date_str} is too old. Only today or yesterday allowed."
 
 
+def _calculate_age(birthday: Optional[str], today: date) -> Optional[int]:
+    if not birthday:
+        return None
+    try:
+        birth_date = date.fromisoformat(birthday)
+    except ValueError:
+        return None
+    if birth_date > today:
+        return None
+    return today.year - birth_date.year - (
+        (today.month, today.day) < (birth_date.month, birth_date.day)
+    )
+
+
 @app.get("/api/scores")
 def get_scores():
     """Get all entries for charts."""
@@ -99,6 +113,25 @@ def get_latest():
         "scores": latest["scores"],
         "daily_gains": daily_gains,
     }
+
+
+@app.get("/api/profiles")
+def get_profiles():
+    """Get player profile data with computed age."""
+    profiles = load_profiles()
+    today = datetime.now(PACIFIC_TZ).date()
+
+    response = {}
+    for name, profile in profiles.items():
+        birthday = profile.get("birthday")
+        response[name] = {
+            "nickname": profile.get("nickname"),
+            "birthday": birthday,
+            "age": _calculate_age(birthday, today),
+            "description": profile.get("description"),
+        }
+
+    return response
 
 
 @app.post("/api/update", response_model=UpdateResponse)

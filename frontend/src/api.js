@@ -12,6 +12,12 @@ export async function fetchLatest() {
   return response.json();
 }
 
+export async function fetchProfiles() {
+  const response = await fetch(`${API_BASE}/api/profiles`);
+  if (!response.ok) throw new Error('Failed to fetch profiles');
+  return response.json();
+}
+
 export async function submitUpdate(message, apiKey, force = false) {
   const response = await fetch(`${API_BASE}/api/update`, {
     method: 'POST',

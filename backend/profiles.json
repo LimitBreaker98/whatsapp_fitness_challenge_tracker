@@ -1,0 +1,32 @@
+{
+  "Jose": {
+    "birthday": "2000-02-20",
+    "nickname": "JayB015",
+    "description": "Quantum squats: reps in superposition, observed."
+  },
+  "Pepo": {
+    "birthday": "1998-08-30",
+    "nickname": "jaunepep",
+    "description": "Composes gains in 4/4; every set crescendos."
+  },
+  "Guerron": {
+    "birthday": "1998-12-10",
+    "nickname": "Juangue",
+    "description": "Business hours, gym ROI: fewer hours, more PRs, less BS."
+  },
+  "Pocho": {
+    "birthday": "1998-11-11",
+    "nickname": "darkhat13",
+    "description": "Debugs with burpees, deploys sprints to prod."
+  },
+  "Mene": {
+    "birthday": "1999-07-20",
+    "nickname": "SrMene024",
+    "description": "Civil-engineer cardio: jumps scaffolds like Mario."
+  },
+  "Josh": {
+    "birthday": "1998-09-09",
+    "nickname": "LimitBreaker98",
+    "description": "Fixes results and reps like this site: ship, lift, repeat."
+  }
+}

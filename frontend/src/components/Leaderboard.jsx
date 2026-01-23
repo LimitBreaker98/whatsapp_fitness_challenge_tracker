@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { fetchLatest, fetchScores } from '../api';
+import { fetchLatest, fetchProfiles, fetchScores } from '../api';
 import './Leaderboard.css';
 
 // Calculate streak (consecutive days with gains > 0)
@@ -34,13 +34,14 @@ function calculateStreaks(entries) {
   return streaks;
 }
 
-export default function Leaderboard() {
+export default function Leaderboard({ selectedPlayer = null, onSelectPlayer = () => {} }) {
   const { t } = useTranslation('leaderboard');
   const { t: tCommon } = useTranslation('common');
   const [data, setData] = useState(null);
   const [maxScore, setMaxScore] = useState(0);
   const [newPlayers, setNewPlayers] = useState(new Set());
   const [streaks, setStreaks] = useState({});
+  const [profiles, setProfiles] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -51,6 +52,13 @@ export default function Leaderboard() {
           fetchLatest(),
           fetchScores(),
         ]);
+
+        let profileData = {};
+        try {
+          profileData = await fetchProfiles();
+        } catch (profileError) {
+          profileData = {};
+        }
 
         // Calculate max possible score (for progress bar scaling)
         const allScoreValues = allScores.entries.flatMap((e) =>
@@ -80,6 +88,7 @@ export default function Leaderboard() {
         setMaxScore(max);
         setNewPlayers(newPlayerSet);
         setStreaks(playerStreaks);
+        setProfiles(profileData || {});
       } catch (err) {
         setError(err.message);
       } finally {
@@ -114,6 +123,18 @@ export default function Leaderboard() {
   // Get leader score for pts behind calculation
   const leaderScore = sortedPlayers.length > 0 ? sortedPlayers[0][1] : 0;
 
+  const toggleExpanded = (playerName) => {
+    const nextSelection = selectedPlayer === playerName ? null : playerName;
+    onSelectPlayer(nextSelection);
+  };
+
+  const handleRowKeyDown = (event, playerName) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      toggleExpanded(playerName);
+    }
+  };
+
   return (
     <div className="leaderboard">
       <h2>{t('title')}</h2>
@@ -136,29 +157,63 @@ export default function Leaderboard() {
           const isNewPlayer = newPlayers.has(name);
           const ptsBehind = leaderScore - score;
           const streak = streaks[name] || 0;
+          const profile = profiles[name] || {};
+          const isExpanded = selectedPlayer === name;
+          const profileId = `profile-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
           return (
-            <div key={name} className={`player-row rank-${rank}`}>
-              <div className="rank">#{rank}</div>
-              <div className="name">{name}</div>
-              <div className="score">{score}</div>
-              <div className="delta-cell">
-                {isNewPlayer ? (
-                  <span className="welcome-badge">{t('welcome')}</span>
-                ) : dailyGain >= 4 ? (
-                  <span className="gain-badge gain-epic">+{dailyGain}</span>
-                ) : dailyGain >= 2 ? (
-                  <span className="gain-badge gain-rare">+{dailyGain}</span>
-                ) : dailyGain > 0 ? (
-                  <span className="gain-badge">+{dailyGain}</span>
-                ) : null}
+            <div key={name} className="player-row-wrapper">
+              <div
+                className={`player-row rank-${rank} ${isExpanded ? 'expanded' : ''}`}
+                role="button"
+                tabIndex={0}
+                aria-expanded={isExpanded}
+                aria-controls={profileId}
+                onClick={() => toggleExpanded(name)}
+                onKeyDown={(event) => handleRowKeyDown(event, name)}
+              >
+                <div className="rank">#{rank}</div>
+                <div className="name">{name}</div>
+                <div className="score">{score}</div>
+                <div className="delta-cell">
+                  {isNewPlayer ? (
+                    <span className="welcome-badge">{t('welcome')}</span>
+                  ) : dailyGain >= 4 ? (
+                    <span className="gain-badge gain-epic">+{dailyGain}</span>
+                  ) : dailyGain >= 2 ? (
+                    <span className="gain-badge gain-rare">+{dailyGain}</span>
+                  ) : dailyGain > 0 ? (
+                    <span className="gain-badge">+{dailyGain}</span>
+                  ) : null}
+                </div>
+                <div className="streak">
+                  {streak >= 2 ? `${streak}🔥` : t('noStreak')}
+                </div>
+                <div className="pts-behind">
+                  {rank === 1 ? t('leader') : ptsBehind}
+                </div>
               </div>
-              <div className="streak">
-                {streak >= 2 ? `${streak}🔥` : t('noStreak')}
-              </div>
-              <div className="pts-behind">
-                {rank === 1 ? t('leader') : ptsBehind}
-              </div>
+              {isExpanded && (
+                <div id={profileId} className="player-profile">
+                  <div className="profile-meta">
+                    <div className="profile-item">
+                      <span className="profile-label">{t('profile.nicknameLabel')}:</span>
+                      <span className="profile-value">
+                        {profile.nickname || t('profile.unknown')}
+                      </span>
+                    </div>
+                    <div className="profile-item">
+                      <span className="profile-label">{t('profile.ageLabel')}:</span>
+                      <span className="profile-value">
+                        {profile.age ?? t('profile.unknown')}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="profile-description">
+                    {profile.description || t('profile.missingDescription')}
+                  </p>
+                </div>
+              )}
             </div>
           );
         })}
