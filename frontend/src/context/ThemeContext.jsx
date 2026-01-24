@@ -3,23 +3,41 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext();
 
 export function ThemeProvider({ children }) {
+  const [hasUserOverride, setHasUserOverride] = useState(() => {
+    const saved = localStorage.getItem('theme');
+    return saved === 'light' || saved === 'dark';
+  });
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('theme');
-    if (saved) return saved;
+    if (saved === 'light' || saved === 'dark') return saved;
     // Check system preference
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
-    return 'light';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
   });
 
   useEffect(() => {
-    localStorage.setItem('theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
-  }, [theme]);
+    if (hasUserOverride) {
+      localStorage.setItem('theme', theme);
+    } else {
+      localStorage.removeItem('theme');
+    }
+  }, [theme, hasUserOverride]);
+
+  useEffect(() => {
+    if (hasUserOverride) return;
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (event) => {
+      setTheme(event.matches ? 'dark' : 'light');
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [hasUserOverride]);
 
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    setHasUserOverride(true);
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
   return (
