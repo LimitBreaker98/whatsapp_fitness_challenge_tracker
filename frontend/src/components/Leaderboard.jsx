@@ -210,7 +210,7 @@ export default function Leaderboard({ selectedPlayer = null, onSelectPlayer = ()
                     </div>
                   </div>
                   <p className="profile-description">
-                    {profile.description || t('profile.missingDescription')}
+                    {t(`profiles.${name}`, { defaultValue: '' }) || profile.description || t('profile.missingDescription')}
                   </p>
                 </div>
               )}

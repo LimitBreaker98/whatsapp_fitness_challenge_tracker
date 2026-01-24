@@ -17,5 +17,13 @@
     "ageLabel": "Edad",
     "unknown": "—",
     "missingDescription": "Perfil próximamente."
+  },
+  "profiles": {
+    "Jose": "Sentadillas cuánticas: reps en superposición, observadas.",
+    "Pepo": "Compone ganancias en 4/4; cada set es un crescendo.",
+    "Guerron": "Horario de oficina, ROI gym: menos horas, más PRs.",
+    "Pocho": "Debuguea con burpees, deploya sprints a prod.",
+    "Mene": "Cardio de ingeniero civil: salta andamios como Mario.",
+    "Josh": "Arregla reps como este sitio: ship, lift, repeat."
   }
 }

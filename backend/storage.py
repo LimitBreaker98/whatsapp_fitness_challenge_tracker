@@ -1,12 +1,24 @@
 import json
 import os
+import shutil
 from pathlib import Path
 from typing import Dict, Optional
 
 DATA_DIR = Path(os.getenv("DATA_DIR", Path(__file__).parent))
 DATA_FILE = DATA_DIR / "data.json"
 PROFILES_FILE = DATA_DIR / "profiles.json"
+BUNDLED_PROFILES = Path(__file__).parent / "profiles.json"
 MAX_DESCRIPTION_LENGTH = 60
+
+
+def _init_profiles():
+    """Copy bundled profiles.json to DATA_DIR if not present."""
+    if not PROFILES_FILE.exists() and BUNDLED_PROFILES.exists():
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        shutil.copy(BUNDLED_PROFILES, PROFILES_FILE)
+
+
+_init_profiles()
 
 
 def _get_empty_data() -> dict:

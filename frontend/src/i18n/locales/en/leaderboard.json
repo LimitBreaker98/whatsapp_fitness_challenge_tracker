@@ -17,5 +17,13 @@
     "ageLabel": "Age",
     "unknown": "—",
     "missingDescription": "Profile coming soon."
+  },
+  "profiles": {
+    "Jose": "Quantum squats: reps in superposition, observed.",
+    "Pepo": "Composes gains in 4/4; every set crescendos.",
+    "Guerron": "Business hours, gym ROI: fewer hours, more PRs, less BS.",
+    "Pocho": "Debugs with burpees, deploys sprints to prod.",
+    "Mene": "Civil-engineer cardio: jumps scaffolds like Mario.",
+    "Josh": "Fixes results and reps like this site: ship, lift, repeat."
   }
 }
