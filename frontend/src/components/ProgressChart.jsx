@@ -159,20 +159,22 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
         gains[player] = weeklyGain;
       });
 
-      // Find week winner
-      let winner = null;
+      // Find week winners (can be multiple if tied)
       let maxGain = -Infinity;
-      Object.entries(gains).forEach(([player, gain]) => {
+      Object.values(gains).forEach((gain) => {
         if (gain > maxGain) {
           maxGain = gain;
-          winner = player;
         }
       });
+
+      const winners = Object.entries(gains)
+        .filter(([, gain]) => gain === maxGain)
+        .map(([player]) => player);
 
       return {
         ...week,
         gains,
-        winner,
+        winners,
         maxGain,
       };
     });
@@ -477,9 +479,9 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
           onClick={handleClick}
         />
 
-        {currentWeek.winner && currentWeek.maxGain > 0 && (
+        {currentWeek.winners?.length > 0 && currentWeek.maxGain > 0 && (
           <div className="week-winner">
-            {t('scrollView.weekWinner', { name: currentWeek.winner })} (+{currentWeek.maxGain})
+            {t('scrollView.weekWinner', { name: currentWeek.winners.join(' & ') })} (+{currentWeek.maxGain})
           </div>
         )}
       </div>
