@@ -77,9 +77,12 @@
   cursor: pointer;
 }
 
-.player-row:hover {
-  transform: translateX(4px);
-  box-shadow: 0 2px 4px var(--color-shadow-light);
+/* Only apply hover effects on devices with true hover capability (not touch) */
+@media (hover: hover) {
+  .player-row:hover {
+    transform: translateX(4px);
+    box-shadow: 0 2px 4px var(--color-shadow-light);
+  }
 }
 
 .player-row:focus-visible {
