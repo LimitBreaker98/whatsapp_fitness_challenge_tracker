@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { fetchVotes, submitVote } from '../api';
 import './VotingPanel.css';
 
+const TOTAL_VOTERS = 7;
+
 export default function VotingPanel() {
   const { t } = useTranslation('voting');
   const [votes, setVotes] = useState({ timeline: 0, scroll: 0 });
@@ -11,6 +13,10 @@ export default function VotingPanel() {
   const [status, setStatus] = useState(null); // 'success', 'error', 'already_voted', 'invalid_code'
   const [statusMessage, setStatusMessage] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const totalVotes = votes.timeline + votes.scroll;
+  const allVoted = totalVotes >= TOTAL_VOTERS;
+  const winner = votes.timeline > votes.scroll ? 'Timeline' : votes.scroll > votes.timeline ? 'Scroll' : null;
 
   useEffect(() => {
     async function loadVotes() {
@@ -105,9 +111,15 @@ export default function VotingPanel() {
         </div>
       )}
 
-      <div className="vote-counts">
-        {t('currentVotes', { timeline: votes.timeline, scroll: votes.scroll })}
-      </div>
+      {allVoted ? (
+        <div className="vote-result">
+          {winner ? t('winner', { choice: winner }) : t('tie')}
+        </div>
+      ) : (
+        <div className="vote-progress">
+          {t('votesRemaining', { count: TOTAL_VOTERS - totalVotes })}
+        </div>
+      )}
     </div>
   );
 }

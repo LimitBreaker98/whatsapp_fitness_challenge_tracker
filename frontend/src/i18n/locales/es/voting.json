@@ -10,5 +10,7 @@
   "invalidCode": "Codigo invalido. Pidele a Jorge tu codigo de votacion.",
   "rateLimited": "Demasiados intentos. Espera un minuto.",
   "error": "Algo salio mal. Por favor intenta de nuevo.",
-  "currentVotes": "Votos actuales: Linea de Tiempo {{timeline}} | Desplazamiento {{scroll}}"
+  "votesRemaining": "{{count}} votos restantes",
+  "winner": "{{choice}} gana!",
+  "tie": "Es un empate!"
 }

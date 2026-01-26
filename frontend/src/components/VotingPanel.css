@@ -111,10 +111,20 @@
   color: var(--color-error, #dc2626);
 }
 
-.vote-counts {
+.vote-progress {
   text-align: center;
   font-size: 0.85rem;
   color: var(--color-text-muted);
+}
+
+.vote-result {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-success);
+  padding: 0.5rem;
+  background: var(--color-success-bg);
+  border-radius: 6px;
 }
 
 @media (max-width: 500px) {

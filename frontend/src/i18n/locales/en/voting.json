@@ -10,5 +10,7 @@
   "invalidCode": "Invalid code. Ask Jorge for your voting code.",
   "rateLimited": "Too many attempts. Please wait a minute.",
   "error": "Something went wrong. Please try again.",
-  "currentVotes": "Current votes: Timeline {{timeline}} | Scroll {{scroll}}"
+  "votesRemaining": "{{count}} votes remaining",
+  "winner": "{{choice}} wins!",
+  "tie": "It's a tie!"
 }
