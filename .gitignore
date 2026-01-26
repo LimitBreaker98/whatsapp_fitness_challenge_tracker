@@ -1,8 +1,12 @@
 # Backend
 backend/venv/
 backend/data.json
+backend/votes.json
 backend/__pycache__/
 *.pyc
+
+# Private files
+VOTING_CODES_PRIVATE.md
 
 # Frontend
 frontend/node_modules/

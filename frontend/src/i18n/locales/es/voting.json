@@ -1,0 +1,14 @@
+{
+  "question": "Cual vista del grafico prefieres?",
+  "timelineLabel": "Linea de Tiempo",
+  "scrollLabel": "Desplazamiento",
+  "codePlaceholder": "Codigo secreto",
+  "voteButton": "Votar",
+  "submitting": "Votando...",
+  "thankYou": "Gracias {{name}}! Tu voto ha sido registrado.",
+  "alreadyVoted": "Este codigo ya ha votado!",
+  "invalidCode": "Codigo invalido. Pidele a Jorge tu codigo de votacion.",
+  "rateLimited": "Demasiados intentos. Espera un minuto.",
+  "error": "Algo salio mal. Por favor intenta de nuevo.",
+  "currentVotes": "Votos actuales: Linea de Tiempo {{timeline}} | Desplazamiento {{scroll}}"
+}

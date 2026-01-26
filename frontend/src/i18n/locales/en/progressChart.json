@@ -5,7 +5,8 @@
   "hint": "Click a line to highlight",
   "axisLabels": {
     "date": "Date",
-    "score": "Cumulative Score"
+    "score": "Cumulative Score",
+    "weeklyGains": "Weekly Gains"
   },
   "months": {
     "jan": "Jan",
@@ -20,5 +21,20 @@
     "oct": "Oct",
     "nov": "Nov",
     "dec": "Dec"
+  },
+  "aggregation": {
+    "allTime": "All Time",
+    "weekly": "Weekly",
+    "monthly": "Monthly"
+  },
+  "viewToggle": {
+    "timeline": "Timeline",
+    "scroll": "Scroll"
+  },
+  "scrollView": {
+    "weekOf": "Week of {{date}}",
+    "weekLabel": "Week {{current}} of {{total}}",
+    "weekWinner": "Week Winner: {{name}}",
+    "noData": "No data for this week"
   }
 }

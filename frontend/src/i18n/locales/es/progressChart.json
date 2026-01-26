@@ -2,10 +2,11 @@
   "title": "Progreso de Puntos",
   "showing": "Mostrando: {{player}}",
   "clickToReset": "(clic para restablecer)",
-  "hint": "Haz clic en una línea para resaltar",
+  "hint": "Haz clic en una linea para resaltar",
   "axisLabels": {
     "date": "Fecha",
-    "score": "Puntuación Acumulada"
+    "score": "Puntuacion Acumulada",
+    "weeklyGains": "Ganancias Semanales"
   },
   "months": {
     "jan": "Ene",
@@ -20,5 +21,20 @@
     "oct": "Oct",
     "nov": "Nov",
     "dec": "Dic"
+  },
+  "aggregation": {
+    "allTime": "Todo el Tiempo",
+    "weekly": "Semanal",
+    "monthly": "Mensual"
+  },
+  "viewToggle": {
+    "timeline": "Linea de Tiempo",
+    "scroll": "Desplazamiento"
+  },
+  "scrollView": {
+    "weekOf": "Semana del {{date}}",
+    "weekLabel": "Semana {{current}} de {{total}}",
+    "weekWinner": "Ganador de la Semana: {{name}}",
+    "noData": "Sin datos para esta semana"
   }
 }

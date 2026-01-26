@@ -1,13 +1,14 @@
 import os
+from collections import defaultdict
 from datetime import datetime, timedelta, date
 from zoneinfo import ZoneInfo
 from typing import Optional, Tuple
-from fastapi import FastAPI, HTTPException, Header
+from fastapi import FastAPI, HTTPException, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from parser import parse_message, ParseError
-from storage import load_data, load_profiles, add_entry, get_latest_entry, get_previous_entry, entry_exists
+from storage import load_data, load_profiles, add_entry, get_latest_entry, get_previous_entry, entry_exists, get_vote_counts, submit_vote
 
 PACIFIC_TZ = ZoneInfo("America/Los_Angeles")
 
@@ -27,6 +28,26 @@ app.add_middleware(
 # API key from environment variable
 API_KEY = os.getenv("API_KEY", "dev-secret-key")
 
+# Rate limiting for vote endpoint (in-memory, resets on restart)
+VOTE_RATE_LIMIT = 5  # max attempts per window
+VOTE_RATE_WINDOW = 60  # window in seconds
+vote_attempts: dict[str, list[datetime]] = defaultdict(list)
+
+
+def check_vote_rate_limit(ip: str) -> bool:
+    """Check if IP has exceeded vote rate limit. Returns True if allowed."""
+    now = datetime.now()
+    cutoff = now - timedelta(seconds=VOTE_RATE_WINDOW)
+
+    # Clean old attempts
+    vote_attempts[ip] = [t for t in vote_attempts[ip] if t > cutoff]
+
+    if len(vote_attempts[ip]) >= VOTE_RATE_LIMIT:
+        return False
+
+    vote_attempts[ip].append(now)
+    return True
+
 
 class UpdateRequest(BaseModel):
     message: str
@@ -38,6 +59,11 @@ class UpdateResponse(BaseModel):
     date: str
     message: str
     requires_confirmation: bool = False  # True if entry exists and force=False
+
+
+class VoteRequest(BaseModel):
+    code: str
+    choice: str  # "timeline" or "scroll"
 
 
 def _compute_daily_gains(current_scores: dict, previous_scores: Optional[dict]) -> dict:
@@ -221,3 +247,33 @@ def submit_update(
 def health_check():
     """Health check endpoint."""
     return {"status": "ok"}
+
+
+@app.get("/api/votes")
+def get_votes():
+    """Get current vote counts for chart views."""
+    return get_vote_counts()
+
+
+@app.post("/api/vote")
+def post_vote(vote_request: VoteRequest, request: Request):
+    """Submit a vote for preferred chart view."""
+    # Rate limiting
+    client_ip = request.client.host if request.client else "unknown"
+    if not check_vote_rate_limit(client_ip):
+        raise HTTPException(
+            status_code=429,
+            detail="Too many attempts. Please wait a minute before trying again."
+        )
+
+    result = submit_vote(vote_request.code, vote_request.choice)
+
+    if "error" in result:
+        if result["error"] == "invalid_code":
+            raise HTTPException(status_code=400, detail="Invalid code. Ask Jorge for your voting code.")
+        elif result["error"] == "already_voted":
+            raise HTTPException(status_code=400, detail="This code has already voted!")
+        elif result["error"] == "invalid_choice":
+            raise HTTPException(status_code=400, detail="Choice must be 'timeline' or 'scroll'")
+
+    return result

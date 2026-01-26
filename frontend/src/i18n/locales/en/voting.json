@@ -1,0 +1,14 @@
+{
+  "question": "Which chart view do you prefer?",
+  "timelineLabel": "Timeline",
+  "scrollLabel": "Scroll",
+  "codePlaceholder": "Secret code",
+  "voteButton": "Vote",
+  "submitting": "Voting...",
+  "thankYou": "Thanks {{name}}! Your vote has been recorded.",
+  "alreadyVoted": "This code has already voted!",
+  "invalidCode": "Invalid code. Ask Jorge for your voting code.",
+  "rateLimited": "Too many attempts. Please wait a minute.",
+  "error": "Something went wrong. Please try again.",
+  "currentVotes": "Current votes: Timeline {{timeline}} | Scroll {{scroll}}"
+}

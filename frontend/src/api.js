@@ -36,3 +36,27 @@ export async function submitUpdate(message, apiKey, force = false) {
 
   return data;
 }
+
+export async function fetchVotes() {
+  const response = await fetch(`${API_BASE}/api/votes`);
+  if (!response.ok) throw new Error('Failed to fetch votes');
+  return response.json();
+}
+
+export async function submitVote(code, choice) {
+  const response = await fetch(`${API_BASE}/api/vote`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ code, choice }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.detail || 'Failed to submit vote');
+  }
+
+  return data;
+}
