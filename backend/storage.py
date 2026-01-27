@@ -128,7 +128,7 @@ VOTE_CODES_ENV = os.getenv("VOTE_CODES")
 
 
 def _get_empty_votes() -> dict:
-    return {"vote_codes": {}, "vote_counts": {"timeline": 0, "scroll": 0}}
+    return {"vote_codes": {}, "vote_counts": {"timeline": 0, "podium": 0, "both": 0}}
 
 
 def _init_votes_from_env() -> dict:
@@ -142,7 +142,7 @@ def _init_votes_from_env() -> dict:
             code: {"name": name, "voted": None}
             for code, name in codes_map.items()
         }
-        return {"vote_codes": vote_codes, "vote_counts": {"timeline": 0, "scroll": 0}}
+        return {"vote_codes": vote_codes, "vote_counts": {"timeline": 0, "podium": 0, "both": 0}}
     except json.JSONDecodeError:
         return _get_empty_votes()
 
@@ -161,7 +161,7 @@ def load_votes() -> dict:
         with open(VOTES_FILE, "r") as f:
             persisted = json.load(f)
     else:
-        persisted = {"vote_codes": {}, "vote_counts": {"timeline": 0, "scroll": 0}}
+        persisted = {"vote_codes": {}, "vote_counts": {"timeline": 0, "podium": 0, "both": 0}}
 
     # Merge env codes with persisted vote state
     env_data = _init_votes_from_env()
@@ -192,7 +192,7 @@ def submit_vote(code: str, choice: str) -> dict:
     Submit a vote using a secret code.
     Returns dict with 'success', 'name', or 'error'.
     """
-    if choice not in ("timeline", "scroll"):
+    if choice not in ("timeline", "podium", "both"):
         return {"error": "invalid_choice"}
 
     data = load_votes()

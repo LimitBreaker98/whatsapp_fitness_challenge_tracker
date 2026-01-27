@@ -196,6 +196,183 @@
   color: #fde68a;
 }
 
+/* Podium View */
+.podium-view-container {
+  position: relative;
+  touch-action: pan-y;
+}
+
+.podium-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0 1rem 0;
+}
+
+.podium-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.podium-nav-btn:hover:not(:disabled) {
+  background: var(--color-bg-hover);
+  border-color: var(--color-primary);
+}
+
+.podium-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.podium-week-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.podium-week-info .week-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.podium-week-info .week-counter {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.podium-view-empty {
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-muted);
+}
+
+/* Podium Stage */
+.podium-stage {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.5rem;
+  min-height: 240px;
+  padding: 1rem 0;
+}
+
+.podium-place {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100px;
+}
+
+.podium-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.podium-medal {
+  font-size: 1.75rem;
+}
+
+.podium-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  text-align: center;
+  word-break: break-word;
+}
+
+.podium-points {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-success, #16a34a);
+}
+
+.podium-block {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px 8px 0 0;
+  transition: height 0.3s ease;
+}
+
+.podium-place-1 .podium-block {
+  background: linear-gradient(180deg, #ffd700 0%, #f59e0b 100%);
+}
+
+.podium-place-2 .podium-block {
+  background: linear-gradient(180deg, #c0c0c0 0%, #9ca3af 100%);
+}
+
+.podium-place-3 .podium-block {
+  background: linear-gradient(180deg, #cd7f32 0%, #b45309 100%);
+}
+
+.podium-position {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Remaining players */
+.podium-rest {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.podium-rest-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: var(--color-bg);
+  border-radius: 8px;
+}
+
+.podium-rest-position {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.podium-rest-name {
+  flex: 1;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.podium-rest-points {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-success, #16a34a);
+}
+
 /* Mobile: stack header vertically */
 @media (max-width: 500px) {
   .progress-chart {
@@ -242,5 +419,49 @@
 
   .scroll-week-info .week-counter {
     font-size: 0.75rem;
+  }
+
+  /* Podium mobile */
+  .podium-nav-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1.1rem;
+  }
+
+  .podium-week-info .week-label {
+    font-size: 1rem;
+  }
+
+  .podium-week-info .week-counter {
+    font-size: 0.75rem;
+  }
+
+  .podium-stage {
+    gap: 0.25rem;
+    min-height: 200px;
+  }
+
+  .podium-place {
+    width: 80px;
+  }
+
+  .podium-medal {
+    font-size: 1.5rem;
+  }
+
+  .podium-name {
+    font-size: 0.85rem;
+  }
+
+  .podium-points {
+    font-size: 0.8rem;
+  }
+
+  .podium-position {
+    font-size: 1.25rem;
+  }
+
+  .podium-rest-item {
+    padding: 0.4rem 0.75rem;
   }
 }

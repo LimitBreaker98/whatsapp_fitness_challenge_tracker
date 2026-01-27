@@ -7,16 +7,20 @@ const TOTAL_VOTERS = 7;
 
 export default function VotingPanel() {
   const { t } = useTranslation('voting');
-  const [votes, setVotes] = useState({ timeline: 0, scroll: 0 });
+  const [votes, setVotes] = useState({ timeline: 0, podium: 0, both: 0 });
   const [code, setCode] = useState('');
   const [selectedChoice, setSelectedChoice] = useState(null);
   const [status, setStatus] = useState(null); // 'success', 'error', 'already_voted', 'invalid_code'
   const [statusMessage, setStatusMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const totalVotes = votes.timeline + votes.scroll;
+  const totalVotes = votes.timeline + votes.podium + votes.both;
   const allVoted = totalVotes >= TOTAL_VOTERS;
-  const winner = votes.timeline > votes.scroll ? 'Timeline' : votes.scroll > votes.timeline ? 'Scroll' : null;
+
+  // Determine winner - "both" votes count toward both options for determining preference
+  const timelineTotal = votes.timeline + votes.both;
+  const podiumTotal = votes.podium + votes.both;
+  const winner = timelineTotal > podiumTotal ? 'Timeline' : podiumTotal > timelineTotal ? 'Podium' : null;
 
   useEffect(() => {
     async function loadVotes() {
@@ -79,11 +83,18 @@ export default function VotingPanel() {
           {t('timelineLabel')}
         </button>
         <button
-          className={`vote-btn ${selectedChoice === 'scroll' ? 'selected' : ''}`}
-          onClick={() => setSelectedChoice('scroll')}
+          className={`vote-btn ${selectedChoice === 'podium' ? 'selected' : ''}`}
+          onClick={() => setSelectedChoice('podium')}
           disabled={loading}
         >
-          {t('scrollLabel')}
+          {t('podiumLabel')}
+        </button>
+        <button
+          className={`vote-btn ${selectedChoice === 'both' ? 'selected' : ''}`}
+          onClick={() => setSelectedChoice('both')}
+          disabled={loading}
+        >
+          {t('bothLabel')}
         </button>
       </div>
 

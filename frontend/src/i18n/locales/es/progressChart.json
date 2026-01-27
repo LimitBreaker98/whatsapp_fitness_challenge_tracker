@@ -29,12 +29,11 @@
   },
   "viewToggle": {
     "timeline": "Linea de Tiempo",
-    "scroll": "Desplazamiento"
+    "podium": "Podio"
   },
-  "scrollView": {
+  "podiumView": {
     "weekOf": "Semana del {{date}}",
     "weekLabel": "Semana {{current}} de {{total}}",
-    "weekWinner": "Ganador de la Semana: {{name}}",
     "noData": "Sin datos para esta semana"
   }
 }

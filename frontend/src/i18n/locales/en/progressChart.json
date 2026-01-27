@@ -29,12 +29,11 @@
   },
   "viewToggle": {
     "timeline": "Timeline",
-    "scroll": "Scroll"
+    "podium": "Podium"
   },
-  "scrollView": {
+  "podiumView": {
     "weekOf": "Week of {{date}}",
     "weekLabel": "Week {{current}} of {{total}}",
-    "weekWinner": "Week Winner: {{name}}",
     "noData": "No data for this week"
   }
 }

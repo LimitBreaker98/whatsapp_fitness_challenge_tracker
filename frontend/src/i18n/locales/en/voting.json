@@ -1,7 +1,8 @@
 {
   "question": "Which chart view do you prefer?",
   "timelineLabel": "Timeline",
-  "scrollLabel": "Scroll",
+  "podiumLabel": "Podium",
+  "bothLabel": "Both",
   "codePlaceholder": "Secret code",
   "voteButton": "Vote",
   "submitting": "Voting...",

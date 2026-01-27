@@ -1,7 +1,8 @@
 {
   "question": "Cual vista del grafico prefieres?",
   "timelineLabel": "Linea de Tiempo",
-  "scrollLabel": "Desplazamiento",
+  "podiumLabel": "Podio",
+  "bothLabel": "Ambos",
   "codePlaceholder": "Codigo secreto",
   "voteButton": "Votar",
   "submitting": "Votando...",

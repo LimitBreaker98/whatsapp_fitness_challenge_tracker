@@ -202,7 +202,7 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
         const lastEntry = week.entries[week.entries.length - 1];
         grouped.push({
           date: week.startDate,
-          label: t('scrollView.weekOf', { date: formatWeekLabel(week.startDate) }),
+          label: t('podiumView.weekOf', { date: formatWeekLabel(week.startDate) }),
           scores: lastEntry.scores,
         });
       });
@@ -377,93 +377,71 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
     );
   };
 
-  // Scroll View (weekly gains bar chart)
-  const renderScrollView = () => {
+  // Podium View (weekly gains with top 3 podium)
+  const renderPodiumView = () => {
     if (weeklyData.length === 0) {
-      return <div className="scroll-view-empty">{t('scrollView.noData')}</div>;
+      return <div className="podium-view-empty">{t('podiumView.noData')}</div>;
     }
 
     const currentWeek = weeklyData[currentWeekIndex];
     const gains = currentWeek.gains;
 
-    const traces = [{
-      x: players,
-      y: players.map((player) => gains[player] || 0),
-      type: 'bar',
-      marker: {
-        color: players.map((player, idx) => {
-          const isActive = selectedPlayer === null || selectedPlayer === player;
-          return isActive ? COLORS[idx % COLORS.length] : INACTIVE_COLOR;
-        }),
-      },
-      opacity: players.map((player) => {
-        const isActive = selectedPlayer === null || selectedPlayer === player;
-        return isActive ? 1 : 0.4;
-      }),
-    }];
+    // Sort players by gains for this week
+    const sortedPlayers = [...players]
+      .map((player) => ({ name: player, gain: gains[player] || 0 }))
+      .sort((a, b) => b.gain - a.gain);
 
-    const layout = {
-      xaxis: {
-        tickfont: { size: 12, color: textColor },
-        fixedrange: true,
-        gridcolor: gridColor,
-        linecolor: gridColor,
-      },
-      yaxis: {
-        title: { text: t('axisLabels.weeklyGains'), font: { color: textColor } },
-        tickfont: { size: 11, color: textColor },
-        range: [0, 28],
-        fixedrange: true,
-        gridcolor: gridColor,
-        linecolor: gridColor,
-      },
-      hovermode: 'x',
-      plot_bgcolor: plotBgColor,
-      paper_bgcolor: paperBgColor,
-      margin: { t: 20, r: 30, b: 60, l: 60 },
-      showlegend: false,
+    const top3 = sortedPlayers.slice(0, 3);
+    const rest = sortedPlayers.slice(3);
+
+    // Reorder for podium display: 2nd, 1st, 3rd
+    const podiumOrder = top3.length >= 3
+      ? [top3[1], top3[0], top3[2]]
+      : top3.length === 2
+      ? [top3[1], top3[0]]
+      : top3;
+
+    const getMedal = (position) => {
+      if (position === 0) return '🥇';
+      if (position === 1) return '🥈';
+      if (position === 2) return '🥉';
+      return '';
     };
 
-    const config = {
-      responsive: true,
-      displayModeBar: false,
-      scrollZoom: false,
-    };
-
-    const handleClick = (event) => {
-      if (event.points && event.points.length > 0) {
-        const clickedPlayer = event.points[0].x;
-        onSelectPlayer(selectedPlayer === clickedPlayer ? null : clickedPlayer);
-      }
+    const getPodiumHeight = (position) => {
+      if (position === 0) return '120px'; // 1st place (tallest)
+      if (position === 1) return '90px';  // 2nd place
+      if (position === 2) return '60px';  // 3rd place
+      return '40px';
     };
 
     return (
       <div
-        className="scroll-view-container"
+        className="podium-view-container"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="scroll-view-header">
+        <div className="podium-view-header">
           <button
-            className="scroll-nav-btn"
+            className="podium-nav-btn"
             onClick={goToPrevWeek}
             disabled={currentWeekIndex === 0}
           >
             &larr;
           </button>
-          <div className="scroll-week-info">
+          <div className="podium-week-info">
             <span className="week-label">
-              {t('scrollView.weekOf', { date: formatWeekLabel(currentWeek.startDate) })}
+              {t('podiumView.weekOf', { date: formatWeekLabel(currentWeek.startDate) })}
             </span>
             <span className="week-counter">
-              {t('scrollView.weekLabel', {
+              {t('podiumView.weekLabel', {
                 current: currentWeekIndex + 1,
                 total: weeklyData.length,
               })}
             </span>
           </div>
           <button
-            className="scroll-nav-btn"
+            className="podium-nav-btn"
             onClick={goToNextWeek}
             disabled={currentWeekIndex === weeklyData.length - 1}
           >
@@ -471,17 +449,36 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
           </button>
         </div>
 
-        <Plot
-          data={traces}
-          layout={layout}
-          config={config}
-          style={{ width: '100%', height: '350px' }}
-          onClick={handleClick}
-        />
+        <div className="podium-stage">
+          {podiumOrder.map((player, idx) => {
+            const originalPosition = top3.findIndex((p) => p.name === player.name);
+            return (
+              <div key={player.name} className={`podium-place podium-place-${originalPosition + 1}`}>
+                <div className="podium-player">
+                  <span className="podium-medal">{getMedal(originalPosition)}</span>
+                  <span className="podium-name">{player.name}</span>
+                  <span className="podium-points">+{player.gain}</span>
+                </div>
+                <div
+                  className="podium-block"
+                  style={{ height: getPodiumHeight(originalPosition) }}
+                >
+                  <span className="podium-position">{originalPosition + 1}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
-        {currentWeek.winners?.length > 0 && currentWeek.maxGain > 0 && (
-          <div className="week-winner">
-            {t('scrollView.weekWinner', { name: currentWeek.winners.join(' & ') })} (+{currentWeek.maxGain})
+        {rest.length > 0 && (
+          <div className="podium-rest">
+            {rest.map((player, idx) => (
+              <div key={player.name} className="podium-rest-item">
+                <span className="podium-rest-position">{idx + 4}</span>
+                <span className="podium-rest-name">{player.name}</span>
+                <span className="podium-rest-points">+{player.gain}</span>
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -518,9 +515,9 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
                 </svg>
               </button>
               <button
-                className={`view-toggle-btn ${viewMode === 'scroll' ? 'active' : ''}`}
-                onClick={() => setViewMode('scroll')}
-                title={t('viewToggle.scroll')}
+                className={`view-toggle-btn ${viewMode === 'podium' ? 'active' : ''}`}
+                onClick={() => setViewMode('podium')}
+                title={t('viewToggle.podium')}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <rect x="3" y="3" width="18" height="18" rx="2" />
@@ -541,7 +538,7 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
           </div>
         </div>
 
-        {viewMode === 'timeline' ? renderTimelineView() : renderScrollView()}
+        {viewMode === 'timeline' ? renderTimelineView() : renderPodiumView()}
       </div>
 
       <VotingPanel />
