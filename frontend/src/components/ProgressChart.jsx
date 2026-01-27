@@ -391,29 +391,58 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
       .map((player) => ({ name: player, gain: gains[player] || 0 }))
       .sort((a, b) => b.gain - a.gain);
 
-    const top3 = sortedPlayers.slice(0, 3);
-    const rest = sortedPlayers.slice(3);
+    // Assign ranks with ties (1st, 1st, 3rd, 4th, 4th, 6th, etc.)
+    const rankedPlayers = [];
+    let currentRank = 1;
+    sortedPlayers.forEach((player, idx) => {
+      if (idx > 0 && player.gain < sortedPlayers[idx - 1].gain) {
+        currentRank = idx + 1; // Skip ranks for ties
+      }
+      rankedPlayers.push({ ...player, rank: currentRank });
+    });
 
-    // Reorder for podium display: 2nd, 1st, 3rd
-    const podiumOrder = top3.length >= 3
-      ? [top3[1], top3[0], top3[2]]
-      : top3.length === 2
-      ? [top3[1], top3[0]]
-      : top3;
+    // Group players by rank for podium positions
+    const rankGroups = {};
+    rankedPlayers.forEach((player) => {
+      if (!rankGroups[player.rank]) {
+        rankGroups[player.rank] = [];
+      }
+      rankGroups[player.rank].push(player);
+    });
 
-    const getMedal = (position) => {
-      if (position === 0) return '🥇';
-      if (position === 1) return '🥈';
-      if (position === 2) return '🥉';
+    // Get unique ranks in order
+    const uniqueRanks = [...new Set(rankedPlayers.map((p) => p.rank))].sort((a, b) => a - b);
+
+    // Podium shows ranks 1, 2, 3 (which may have multiple players each)
+    const podiumRanks = uniqueRanks.filter((r) => r <= 3);
+    const restPlayers = rankedPlayers.filter((p) => p.rank > 3);
+
+    const getMedal = (rank) => {
+      if (rank === 1) return '🥇';
+      if (rank === 2) return '🥈';
+      if (rank === 3) return '🥉';
       return '';
     };
 
-    const getPodiumHeight = (position) => {
-      if (position === 0) return '120px'; // 1st place (tallest)
-      if (position === 1) return '90px';  // 2nd place
-      if (position === 2) return '60px';  // 3rd place
+    const getPodiumHeight = (rank) => {
+      if (rank === 1) return '120px';
+      if (rank === 2) return '90px';
+      if (rank === 3) return '60px';
       return '40px';
     };
+
+    const getPodiumClass = (rank) => {
+      if (rank === 1) return 'podium-place-1';
+      if (rank === 2) return 'podium-place-2';
+      if (rank === 3) return 'podium-place-3';
+      return '';
+    };
+
+    // Build podium order: 2nd, 1st, 3rd (for visual layout)
+    const podiumOrder = [];
+    if (rankGroups[2]) podiumOrder.push({ rank: 2, players: rankGroups[2] });
+    if (rankGroups[1]) podiumOrder.push({ rank: 1, players: rankGroups[1] });
+    if (rankGroups[3]) podiumOrder.push({ rank: 3, players: rankGroups[3] });
 
     return (
       <div
@@ -450,31 +479,32 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
         </div>
 
         <div className="podium-stage">
-          {podiumOrder.map((player, idx) => {
-            const originalPosition = top3.findIndex((p) => p.name === player.name);
-            return (
-              <div key={player.name} className={`podium-place podium-place-${originalPosition + 1}`}>
-                <div className="podium-player">
-                  <span className="podium-medal">{getMedal(originalPosition)}</span>
-                  <span className="podium-name">{player.name}</span>
-                  <span className="podium-points">+{player.gain}</span>
-                </div>
-                <div
-                  className="podium-block"
-                  style={{ height: getPodiumHeight(originalPosition) }}
-                >
-                  <span className="podium-position">{originalPosition + 1}</span>
-                </div>
+          {podiumOrder.map(({ rank, players: groupPlayers }) => (
+            <div key={rank} className={`podium-place ${getPodiumClass(rank)}`}>
+              <div className="podium-players-group">
+                {groupPlayers.map((player) => (
+                  <div key={player.name} className="podium-player">
+                    <span className="podium-medal">{getMedal(rank)}</span>
+                    <span className="podium-name">{player.name}</span>
+                    <span className="podium-points">+{player.gain}</span>
+                  </div>
+                ))}
               </div>
-            );
-          })}
+              <div
+                className="podium-block"
+                style={{ height: getPodiumHeight(rank) }}
+              >
+                <span className="podium-position">{rank}</span>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {rest.length > 0 && (
+        {restPlayers.length > 0 && (
           <div className="podium-rest">
-            {rest.map((player, idx) => (
+            {restPlayers.map((player) => (
               <div key={player.name} className="podium-rest-item">
-                <span className="podium-rest-position">{idx + 4}</span>
+                <span className="podium-rest-position">{player.rank}</span>
                 <span className="podium-rest-name">{player.name}</span>
                 <span className="podium-rest-points">+{player.gain}</span>
               </div>
