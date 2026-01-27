@@ -4,29 +4,32 @@
     "detail": "{{count}} jugadores x ${{amount}}"
   },
   "payoutSplit": {
-    "title": "Distribución de Premios"
+    "title": "Distribucion de Premios"
   },
   "hotStreak": {
     "title": "Racha Caliente",
-    "message": "{{player}} lleva una racha de {{count}} días!",
-    "empty": "Sin rachas activas aún"
+    "single": "{{player}} esta en llamas con {{count}} dias!",
+    "multiple": "Racha de {{count}} dias: {{players}}",
+    "empty": "Sin rachas activas aun"
   },
   "mostConsistent": {
-    "title": "Más Consistente",
-    "nickname": "\"La Máquina\"",
-    "avgGain": "Prom {{value}} pts/día",
-    "empty": "Faltan más datos..."
+    "title": "Mas Consistente",
+    "nickname": "\"La Maquina\"",
+    "avgGain": "Prom {{value}} pts/dia",
+    "tie": "Empate a {{count}}! {{players}}",
+    "empty": "Faltan mas datos..."
   },
   "rivalryWatch": {
     "title": "Rivalidades",
+    "neckNeck": "CODO A CODO!",
+    "battle": "Batalla por el #{{rank}}!",
+    "closing": "acercandose a {{player}}!",
     "gap": "{{gap}} pts de diferencia!",
     "empty": "Sin batallas cerradas ahora"
   },
-  "slackerAlert": {
-    "title": "Alerta de Flojera",
-    "message_one": "{{player}} no ha anotado en {{count}} día...",
-    "message_other": "{{player}} no ha anotado en {{count}} días...",
-    "detail": "Es hora de moverse!",
-    "empty": "Todos están trabajando duro!"
+  "bigMover": {
+    "title": "Gran Movimiento",
+    "message": "hizo +{{gain}} el {{date}}!",
+    "empty": "Sin movimientos grandes..."
   }
 }

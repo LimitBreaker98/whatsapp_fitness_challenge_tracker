@@ -42,15 +42,19 @@ export default function FunStats() {
   const streaks = calculateStreaks(entries, players);
   const activeStreaks = streaks.filter(s => s.streak >= 2).sort((a, b) => b.streak - a.streak);
 
+  // Get all players tied at top streak
+  const maxStreak = activeStreaks.length > 0 ? activeStreaks[0].streak : 0;
+  const topStreakers = activeStreaks.filter(s => s.streak === maxStreak);
+
   // Calculate consistency (lowest coefficient of variation in daily gains)
-  const consistency = calculateConsistency(entries, players);
+  const consistencyResults = calculateConsistency(entries, players);
 
   // Find rivalries (players within 5 points of each other)
   const latestScores = entries[entries.length - 1].scores;
-  const rivalries = findRivalries(latestScores);
+  const rivalries = findRivalries(latestScores, entries);
 
-  // Find slackers (no points in last 2+ days)
-  const slackers = findSlackers(entries, players);
+  // Find big mover (biggest single-day gain in last 7 days)
+  const bigMover = findBigMover(entries);
 
   return (
     <div className="fun-stats">
@@ -83,16 +87,16 @@ export default function FunStats() {
       </div>
 
       {/* Stats cards */}
-      <div className="fun-card streak-card">
+      <div className={`fun-card streak-card${maxStreak >= 5 ? ' blazing' : ''}`}>
         <div className="fun-card-icon">🔥</div>
         <div className="fun-card-content">
           <h4>{t('hotStreak.title')}</h4>
-          {activeStreaks.length > 0 ? (
-            activeStreaks.slice(0, 2).map(({ player, streak }) => (
-              <p key={player}>
-                {t('hotStreak.message', { player, count: streak })}
-              </p>
-            ))
+          {topStreakers.length > 0 ? (
+            topStreakers.length === 1 ? (
+              <p>{t('hotStreak.single', { player: topStreakers[0].player, count: maxStreak })}</p>
+            ) : (
+              <p>{t('hotStreak.multiple', { count: maxStreak, players: topStreakers.map(s => s.player).join(', ') })}</p>
+            )
           ) : (
             <p className="empty-state">{t('hotStreak.empty')}</p>
           )}
@@ -103,31 +107,51 @@ export default function FunStats() {
         <div className="fun-card-icon">🎯</div>
         <div className="fun-card-content">
           <h4>{t('mostConsistent.title')}</h4>
-          {consistency ? (
-            <>
-              <p>
-                <strong>{consistency.player}</strong> — {t('mostConsistent.nickname')}
-              </p>
-              <span className="fun-card-detail">
-                {t('mostConsistent.avgGain', { value: consistency.avgGain.toFixed(1) })}
-              </span>
-            </>
+          {consistencyResults && consistencyResults.length > 0 ? (
+            consistencyResults.length === 1 ? (
+              <>
+                <p>
+                  <strong>{consistencyResults[0].player}</strong> — {t('mostConsistent.nickname')}
+                </p>
+                <span className="fun-card-detail">
+                  {t('mostConsistent.avgGain', { value: consistencyResults[0].avgGain.toFixed(1) })}
+                </span>
+              </>
+            ) : (
+              <p>{t('mostConsistent.tie', { count: consistencyResults.length, players: consistencyResults.map(p => p.player).join(', ') })}</p>
+            )
           ) : (
             <p className="empty-state">{t('mostConsistent.empty')}</p>
           )}
         </div>
       </div>
 
-      <div className="fun-card rivalry-card">
+      <div className={`fun-card rivalry-card${rivalries.length > 0 && rivalries[0].isTied ? ' neck-neck' : ''}`}>
         <div className="fun-card-icon">⚔️</div>
         <div className="fun-card-content">
           <h4>{t('rivalryWatch.title')}</h4>
           {rivalries.length > 0 ? (
-            rivalries.slice(0, 1).map(({ player1, player2, gap }, i) => (
-              <p key={i}>
-                <strong>{player1}</strong> vs <strong>{player2}</strong>
-                <span className="rivalry-gap">{t('rivalryWatch.gap', { gap })}</span>
-              </p>
+            rivalries.slice(0, 1).map(({ player1, player2, gap, isTied, momentum, rank }, i) => (
+              <div key={i}>
+                {isTied ? (
+                  <>
+                    <span className="neck-neck-badge">{t('rivalryWatch.neckNeck')}</span>
+                    <p>
+                      <strong>{player1}</strong> vs <strong>{player2}</strong>
+                      <span className="rivalry-detail">{t('rivalryWatch.battle', { rank })}</span>
+                    </p>
+                  </>
+                ) : (
+                  <p>
+                    <strong>{player2}</strong> {t('rivalryWatch.closing', { player: player1 })}
+                    <span className="rivalry-gap">
+                      {gap} pts
+                      {momentum === 'closing' && <span className="momentum-arrow up"></span>}
+                      {momentum === 'widening' && <span className="momentum-arrow down"></span>}
+                    </span>
+                  </p>
+                )}
+              </div>
             ))
           ) : (
             <p className="empty-state">{t('rivalryWatch.empty')}</p>
@@ -135,19 +159,18 @@ export default function FunStats() {
         </div>
       </div>
 
-      <div className="fun-card slacker-card">
-        <div className="fun-card-icon">😴</div>
+      <div className={`fun-card big-mover-card${bigMover ? ' has-mover' : ''}`}>
+        <div className="fun-card-icon">
+          <span className="rocket-icon">🚀</span>
+        </div>
         <div className="fun-card-content">
-          <h4>{t('slackerAlert.title')}</h4>
-          {slackers.length > 0 ? (
-            <>
-              <p>
-                {t('slackerAlert.message', { player: slackers[0].player, count: slackers[0].days })}
-              </p>
-              <span className="fun-card-detail">{t('slackerAlert.detail')}</span>
-            </>
+          <h4>{t('bigMover.title')}</h4>
+          {bigMover ? (
+            <p>
+              <strong>{bigMover.player}</strong> {t('bigMover.message', { gain: bigMover.gain, date: bigMover.date })}
+            </p>
           ) : (
-            <p className="empty-state">{t('slackerAlert.empty')}</p>
+            <p className="empty-state">{t('bigMover.empty')}</p>
           )}
         </div>
       </div>
@@ -212,12 +235,18 @@ function calculateConsistency(entries, players) {
 
   // Lowest CV = most consistent
   playerStats.sort((a, b) => a.cv - b.cv);
-  return playerStats[0];
+
+  // Find all players essentially tied (within 0.05 CV)
+  const bestCV = playerStats[0].cv;
+  const tied = playerStats.filter(p => Math.abs(p.cv - bestCV) < 0.05);
+
+  return tied;
 }
 
-function findRivalries(scores) {
+function findRivalries(scores, entries) {
   const sorted = Object.entries(scores).sort(([, a], [, b]) => b - a);
   const rivalries = [];
+  const prevScores = entries.length >= 2 ? entries[entries.length - 2].scores : null;
 
   for (let i = 0; i < sorted.length - 1; i++) {
     const [player1, score1] = sorted[i];
@@ -225,39 +254,44 @@ function findRivalries(scores) {
     const gap = score1 - score2;
 
     if (gap <= 5 && gap >= 0) {
-      rivalries.push({ player1, player2, gap });
+      // Calculate momentum
+      let momentum = 'even';
+      if (prevScores) {
+        const gain1 = score1 - (prevScores[player1] || score1);
+        const gain2 = score2 - (prevScores[player2] || score2);
+        momentum = gain2 > gain1 ? 'closing' : gain1 > gain2 ? 'widening' : 'even';
+      }
+
+      rivalries.push({
+        player1,
+        player2,
+        gap,
+        isTied: gap === 0,
+        momentum,
+        rank: i + 1
+      });
     }
   }
 
   return rivalries;
 }
 
-function findSlackers(entries, players) {
-  if (entries.length < 2) return [];
+function findBigMover(entries) {
+  if (entries.length < 2) return null;
 
-  const slackers = [];
+  // Look at last 7 days
+  const recent = entries.slice(-7);
+  let best = { player: null, gain: 0, date: null };
 
-  for (const player of players) {
-    let daysWithoutGain = 0;
-
-    for (let i = entries.length - 1; i > 0; i--) {
-      const currentScore = entries[i].scores[player] || 0;
-      const prevScore = entries[i - 1].scores[player] || 0;
-      const gain = currentScore - prevScore;
-
-      if (gain <= 0) {
-        daysWithoutGain++;
-      } else {
-        break;
+  for (let i = 1; i < recent.length; i++) {
+    for (const player of Object.keys(recent[i].scores)) {
+      const gain = recent[i].scores[player] - (recent[i - 1].scores[player] || 0);
+      // Prefer higher gains, and if equal, prefer more recent
+      if (gain > best.gain || (gain === best.gain && gain > 0)) {
+        best = { player, gain, date: recent[i].date };
       }
-    }
-
-    if (daysWithoutGain >= 2) {
-      slackers.push({ player, days: daysWithoutGain });
     }
   }
 
-  // Sort by most days without gain
-  slackers.sort((a, b) => b.days - a.days);
-  return slackers;
+  return best.player ? best : null;
 }

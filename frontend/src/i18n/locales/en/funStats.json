@@ -8,25 +8,28 @@
   },
   "hotStreak": {
     "title": "Hot Streak",
-    "message": "{{player}} is on a {{count}}-day streak!",
+    "single": "{{player}} is blazing with {{count}} days!",
+    "multiple": "{{count}}-day streak: {{players}}",
     "empty": "No active streaks yet"
   },
   "mostConsistent": {
     "title": "Most Consistent",
     "nickname": "\"The Machine\"",
     "avgGain": "Avg {{value}} pts/day",
+    "tie": "{{count}}-way tie! {{players}}",
     "empty": "Need more data..."
   },
   "rivalryWatch": {
     "title": "Rivalry Watch",
+    "neckNeck": "NECK & NECK!",
+    "battle": "Battle for #{{rank}}!",
+    "closing": "closing in on {{player}}!",
     "gap": "{{gap}} pts apart!",
     "empty": "No close battles right now"
   },
-  "slackerAlert": {
-    "title": "Slacker Alert",
-    "message_one": "{{player}} hasn't scored in {{count}} day...",
-    "message_other": "{{player}} hasn't scored in {{count}} days...",
-    "detail": "Time to get moving!",
-    "empty": "Everyone's putting in work!"
+  "bigMover": {
+    "title": "Big Mover",
+    "message": "went +{{gain}} on {{date}}!",
+    "empty": "No big moves yet..."
   }
 }
