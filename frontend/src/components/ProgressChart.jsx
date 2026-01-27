@@ -377,7 +377,7 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
     );
   };
 
-  // Podium View (weekly gains with top 3 podium)
+  // Podium View (weekly gains - minimal list design)
   const renderPodiumView = () => {
     if (weeklyData.length === 0) {
       return <div className="podium-view-empty">{t('podiumView.noData')}</div>;
@@ -401,7 +401,7 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
       rankedPlayers.push({ ...player, rank: currentRank });
     });
 
-    // Group players by rank for podium positions
+    // Group players by rank
     const rankGroups = {};
     rankedPlayers.forEach((player) => {
       if (!rankGroups[player.rank]) {
@@ -413,36 +413,12 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
     // Get unique ranks in order
     const uniqueRanks = [...new Set(rankedPlayers.map((p) => p.rank))].sort((a, b) => a - b);
 
-    // Podium shows ranks 1, 2, 3 (which may have multiple players each)
-    const podiumRanks = uniqueRanks.filter((r) => r <= 3);
-    const restPlayers = rankedPlayers.filter((p) => p.rank > 3);
-
-    const getMedal = (rank) => {
-      if (rank === 1) return '🥇';
-      if (rank === 2) return '🥈';
-      if (rank === 3) return '🥉';
-      return '';
+    const getRankLabel = (rank) => {
+      if (rank === 1) return '1st';
+      if (rank === 2) return '2nd';
+      if (rank === 3) return '3rd';
+      return `${rank}th`;
     };
-
-    const getPodiumHeight = (rank) => {
-      if (rank === 1) return '120px';
-      if (rank === 2) return '90px';
-      if (rank === 3) return '60px';
-      return '40px';
-    };
-
-    const getPodiumClass = (rank) => {
-      if (rank === 1) return 'podium-place-1';
-      if (rank === 2) return 'podium-place-2';
-      if (rank === 3) return 'podium-place-3';
-      return '';
-    };
-
-    // Build podium order: 2nd, 1st, 3rd (for visual layout)
-    const podiumOrder = [];
-    if (rankGroups[2]) podiumOrder.push({ rank: 2, players: rankGroups[2] });
-    if (rankGroups[1]) podiumOrder.push({ rank: 1, players: rankGroups[1] });
-    if (rankGroups[3]) podiumOrder.push({ rank: 3, players: rankGroups[3] });
 
     return (
       <div
@@ -478,39 +454,21 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
           </button>
         </div>
 
-        <div className="podium-stage">
-          {podiumOrder.map(({ rank, players: groupPlayers }) => (
-            <div key={rank} className={`podium-place ${getPodiumClass(rank)}`}>
-              <div className="podium-players-group">
-                {groupPlayers.map((player) => (
-                  <div key={player.name} className="podium-player">
-                    <span className="podium-medal">{getMedal(rank)}</span>
-                    <span className="podium-name">{player.name}</span>
-                    <span className="podium-points">+{player.gain}</span>
-                  </div>
-                ))}
+        <div className="weekly-rankings">
+          {uniqueRanks.map((rank) => {
+            const playersAtRank = rankGroups[rank];
+            const points = playersAtRank[0].gain;
+            return (
+              <div key={rank} className={`rank-row rank-${Math.min(rank, 4)}`}>
+                <span className="rank-position">{getRankLabel(rank)}</span>
+                <span className="rank-names">
+                  {playersAtRank.map((p) => p.name).join(', ')}
+                </span>
+                <span className="rank-points">+{points}</span>
               </div>
-              <div
-                className="podium-block"
-                style={{ height: getPodiumHeight(rank) }}
-              >
-                <span className="podium-position">{rank}</span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
-
-        {restPlayers.length > 0 && (
-          <div className="podium-rest">
-            {restPlayers.map((player) => (
-              <div key={player.name} className="podium-rest-item">
-                <span className="podium-rest-position">{player.rank}</span>
-                <span className="podium-rest-name">{player.name}</span>
-                <span className="podium-rest-points">+{player.gain}</span>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     );
   };

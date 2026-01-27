@@ -258,126 +258,81 @@
   color: var(--color-text-muted);
 }
 
-/* Podium Stage */
-.podium-stage {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  gap: 0.5rem;
-  min-height: 240px;
-  padding: 1rem 0;
-}
-
-.podium-place {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100px;
-}
-
-.podium-players-group {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-bottom: 0.5rem;
-}
-
-.podium-player {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.podium-medal {
-  font-size: 1.75rem;
-}
-
-.podium-name {
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: var(--color-text);
-  text-align: center;
-  word-break: break-word;
-}
-
-.podium-points {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--color-success, #16a34a);
-}
-
-.podium-block {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px 8px 0 0;
-  transition: height 0.3s ease;
-}
-
-.podium-place-1 .podium-block {
-  background: linear-gradient(180deg, #ffd700 0%, #f59e0b 100%);
-}
-
-.podium-place-2 .podium-block {
-  background: linear-gradient(180deg, #c0c0c0 0%, #9ca3af 100%);
-}
-
-.podium-place-3 .podium-block {
-  background: linear-gradient(180deg, #cd7f32 0%, #b45309 100%);
-}
-
-.podium-position {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-}
-
-/* Remaining players */
-.podium-rest {
+/* Weekly Rankings (minimal list design) */
+.weekly-rankings {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--color-border);
 }
 
-.podium-rest-item {
+.rank-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 1rem;
-  background: var(--color-bg);
+  padding: 0.75rem 1rem;
   border-radius: 8px;
+  background: var(--color-bg);
+  border-left: 4px solid transparent;
 }
 
-.podium-rest-position {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--color-border);
+.rank-row.rank-1 {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, var(--color-bg) 100%);
+  border-left-color: #ffd700;
+}
+
+.rank-row.rank-2 {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.15) 0%, var(--color-bg) 100%);
+  border-left-color: #c0c0c0;
+}
+
+.rank-row.rank-3 {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.15) 0%, var(--color-bg) 100%);
+  border-left-color: #cd7f32;
+}
+
+.rank-position {
+  width: 40px;
+  font-weight: 700;
+  font-size: 0.85rem;
   color: var(--color-text-muted);
-  font-size: 0.8rem;
-  font-weight: 600;
+  flex-shrink: 0;
 }
 
-.podium-rest-name {
+.rank-row.rank-1 .rank-position {
+  color: #b8860b;
+}
+
+.rank-row.rank-2 .rank-position {
+  color: #808080;
+}
+
+.rank-row.rank-3 .rank-position {
+  color: #b8860b;
+}
+
+.rank-names {
   flex: 1;
   font-weight: 500;
   color: var(--color-text);
+  font-size: 0.95rem;
 }
 
-.podium-rest-points {
-  font-size: 0.9rem;
-  font-weight: 500;
+.rank-points {
+  font-weight: 600;
+  font-size: 0.95rem;
   color: var(--color-success, #16a34a);
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .rank-row.rank-1 {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.1) 0%, var(--color-bg) 100%);
+}
+
+[data-theme="dark"] .rank-row.rank-2 {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.1) 0%, var(--color-bg) 100%);
+}
+
+[data-theme="dark"] .rank-row.rank-3 {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.1) 0%, var(--color-bg) 100%);
 }
 
 /* Mobile: stack header vertically */
@@ -443,32 +398,21 @@
     font-size: 0.75rem;
   }
 
-  .podium-stage {
-    gap: 0.25rem;
-    min-height: 200px;
+  /* Weekly rankings mobile */
+  .rank-row {
+    padding: 0.6rem 0.75rem;
   }
 
-  .podium-place {
-    width: 80px;
-  }
-
-  .podium-medal {
-    font-size: 1.5rem;
-  }
-
-  .podium-name {
-    font-size: 0.85rem;
-  }
-
-  .podium-points {
+  .rank-position {
+    width: 32px;
     font-size: 0.8rem;
   }
 
-  .podium-position {
-    font-size: 1.25rem;
+  .rank-names {
+    font-size: 0.9rem;
   }
 
-  .podium-rest-item {
-    padding: 0.4rem 0.75rem;
+  .rank-points {
+    font-size: 0.9rem;
   }
 }
