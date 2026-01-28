@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from parser import parse_message, ParseError
-from storage import load_data, load_profiles, add_entry, get_latest_entry, get_previous_entry, entry_exists, get_vote_counts, submit_vote
+from storage import load_data, load_profiles, add_entry, get_latest_entry, get_previous_entry, entry_exists, get_vote_counts, submit_vote, reset_votes
 
 PACIFIC_TZ = ZoneInfo("America/Los_Angeles")
 
@@ -63,7 +63,7 @@ class UpdateResponse(BaseModel):
 
 class VoteRequest(BaseModel):
     code: str
-    choice: str  # "timeline", "podium", "bars", or "both"
+    choice: str  # "ten", "twenty", or "thirty" (last place penalty amount)
 
 
 def _compute_daily_gains(current_scores: dict, previous_scores: Optional[dict]) -> dict:
@@ -274,6 +274,16 @@ def post_vote(vote_request: VoteRequest, request: Request):
         elif result["error"] == "already_voted":
             raise HTTPException(status_code=400, detail="This code has already voted!")
         elif result["error"] == "invalid_choice":
-            raise HTTPException(status_code=400, detail="Choice must be 'timeline', 'podium', 'bars', or 'both'")
+            raise HTTPException(status_code=400, detail="Choice must be 'ten', 'twenty', or 'thirty'")
 
     return result
+
+
+@app.post("/api/votes/reset")
+def reset_votes_endpoint(x_api_key: str = Header(None)):
+    """Reset all votes. Requires API key."""
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+    reset_votes()
+    return {"success": True, "message": "Votes have been reset"}

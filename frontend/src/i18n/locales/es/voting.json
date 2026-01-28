@@ -1,9 +1,8 @@
 {
-  "question": "Cual vista del grafico prefieres?",
-  "timelineLabel": "Linea de Tiempo",
-  "podiumLabel": "Podio",
-  "barsLabel": "Barras",
-  "bothLabel": "Todos",
+  "question": "Cual deberia ser la penalidad para el ultimo lugar?",
+  "tenLabel": "$10",
+  "twentyLabel": "$20",
+  "thirtyLabel": "$30",
   "codePlaceholder": "Codigo secreto",
   "voteButton": "Votar",
   "submitting": "Votando...",

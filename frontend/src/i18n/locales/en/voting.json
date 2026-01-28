@@ -1,9 +1,8 @@
 {
-  "question": "Which chart view do you prefer?",
-  "timelineLabel": "Timeline",
-  "podiumLabel": "Podium",
-  "barsLabel": "Bars",
-  "bothLabel": "All",
+  "question": "What should be the penalty for last place?",
+  "tenLabel": "$10",
+  "twentyLabel": "$20",
+  "thirtyLabel": "$30",
   "codePlaceholder": "Secret code",
   "voteButton": "Vote",
   "submitting": "Voting...",
