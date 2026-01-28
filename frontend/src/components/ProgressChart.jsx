@@ -473,6 +473,110 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
     );
   };
 
+  // Bars View (weekly gains bar chart)
+  const renderBarsView = () => {
+    if (weeklyData.length === 0) {
+      return <div className="bars-view-empty">{t('podiumView.noData')}</div>;
+    }
+
+    const currentWeek = weeklyData[currentWeekIndex];
+    const gains = currentWeek.gains;
+
+    // Sort players by gains for this week (descending)
+    const sortedPlayers = [...players]
+      .map((player, idx) => ({ name: player, gain: gains[player] || 0, colorIdx: idx }))
+      .sort((a, b) => b.gain - a.gain);
+
+    const traces = sortedPlayers.map((player) => ({
+      x: [player.name],
+      y: [player.gain],
+      type: 'bar',
+      name: player.name,
+      marker: {
+        color: COLORS[players.indexOf(player.name) % COLORS.length],
+      },
+      text: [`+${player.gain}`],
+      textposition: 'outside',
+      textfont: { color: textColor, size: 14, weight: 'bold' },
+      hovertemplate: `<b>${player.name}</b><br>+${player.gain} pts<extra></extra>`,
+    }));
+
+    const maxGain = Math.max(...sortedPlayers.map((p) => p.gain), 1);
+    const yAxisMax = Math.ceil(maxGain * 1.2); // Add 20% headroom for labels
+
+    const layout = {
+      xaxis: {
+        tickfont: { size: 12, color: textColor },
+        fixedrange: true,
+        gridcolor: gridColor,
+        linecolor: gridColor,
+      },
+      yaxis: {
+        title: { text: t('axisLabels.weeklyGains'), font: { color: textColor } },
+        tickfont: { size: 11, color: textColor },
+        range: [0, yAxisMax],
+        fixedrange: true,
+        gridcolor: gridColor,
+        linecolor: gridColor,
+      },
+      showlegend: false,
+      hovermode: 'closest',
+      plot_bgcolor: plotBgColor,
+      paper_bgcolor: paperBgColor,
+      margin: { t: 40, r: 20, b: 60, l: 50 },
+      bargap: 0.3,
+    };
+
+    const config = {
+      responsive: true,
+      displayModeBar: false,
+      scrollZoom: false,
+    };
+
+    return (
+      <div
+        className="bars-view-container"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        <div className="bars-view-header">
+          <button
+            className="podium-nav-btn"
+            onClick={goToPrevWeek}
+            disabled={currentWeekIndex === 0}
+          >
+            &larr;
+          </button>
+          <div className="podium-week-info">
+            <span className="week-label">
+              {t('podiumView.weekOf', { date: formatWeekLabel(currentWeek.startDate) })}
+            </span>
+            <span className="week-counter">
+              {t('podiumView.weekLabel', {
+                current: currentWeekIndex + 1,
+                total: weeklyData.length,
+              })}
+            </span>
+          </div>
+          <button
+            className="podium-nav-btn"
+            onClick={goToNextWeek}
+            disabled={currentWeekIndex === weeklyData.length - 1}
+          >
+            &rarr;
+          </button>
+        </div>
+
+        <Plot
+          data={traces}
+          layout={layout}
+          config={config}
+          style={{ width: '100%', height: '350px' }}
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="progress-chart-wrapper">
       <div className="progress-chart">
@@ -513,6 +617,17 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
                   <line x1="9" y1="21" x2="9" y2="9" />
                 </svg>
               </button>
+              <button
+                className={`view-toggle-btn ${viewMode === 'bars' ? 'active' : ''}`}
+                onClick={() => setViewMode('bars')}
+                title={t('viewToggle.bars')}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="12" width="4" height="9" />
+                  <rect x="10" y="6" width="4" height="15" />
+                  <rect x="17" y="3" width="4" height="18" />
+                </svg>
+              </button>
             </div>
             {viewMode === 'timeline' && (
               <div className="active-hint">
@@ -526,7 +641,9 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
           </div>
         </div>
 
-        {viewMode === 'timeline' ? renderTimelineView() : renderPodiumView()}
+        {viewMode === 'timeline' && renderTimelineView()}
+        {viewMode === 'podium' && renderPodiumView()}
+        {viewMode === 'bars' && renderBarsView()}
       </div>
 
       <VotingPanel />

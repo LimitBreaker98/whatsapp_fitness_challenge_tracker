@@ -63,7 +63,7 @@ class UpdateResponse(BaseModel):
 
 class VoteRequest(BaseModel):
     code: str
-    choice: str  # "timeline" or "scroll"
+    choice: str  # "timeline", "podium", "bars", or "both"
 
 
 def _compute_daily_gains(current_scores: dict, previous_scores: Optional[dict]) -> dict:
@@ -274,6 +274,6 @@ def post_vote(vote_request: VoteRequest, request: Request):
         elif result["error"] == "already_voted":
             raise HTTPException(status_code=400, detail="This code has already voted!")
         elif result["error"] == "invalid_choice":
-            raise HTTPException(status_code=400, detail="Choice must be 'timeline' or 'scroll'")
+            raise HTTPException(status_code=400, detail="Choice must be 'timeline', 'podium', 'bars', or 'both'")
 
     return result

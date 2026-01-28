@@ -29,7 +29,8 @@
   },
   "viewToggle": {
     "timeline": "Timeline",
-    "podium": "Podium"
+    "podium": "Podium",
+    "bars": "Bars"
   },
   "podiumView": {
     "weekOf": "Week of {{date}}",

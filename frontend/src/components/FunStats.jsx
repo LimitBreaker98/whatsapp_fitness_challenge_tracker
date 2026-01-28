@@ -83,6 +83,7 @@ export default function FunStats() {
               </div>
             ))}
           </div>
+          <span className="fun-card-detail last-place-penalty">{t('payoutSplit.lastPlacePenalty')}</span>
         </div>
       </div>
 
@@ -131,23 +132,31 @@ export default function FunStats() {
         <div className="fun-card-content">
           <h4>{t('rivalryWatch.title')}</h4>
           {rivalries.length > 0 ? (
-            rivalries.slice(0, 1).map(({ player1, player2, gap, isTied, momentum, rank }, i) => (
+            rivalries.slice(0, 1).map((rivalry, i) => (
               <div key={i}>
-                {isTied ? (
+                {rivalry.isLeadTie ? (
                   <>
                     <span className="neck-neck-badge">{t('rivalryWatch.neckNeck')}</span>
                     <p>
-                      <strong>{player1}</strong> vs <strong>{player2}</strong>
-                      <span className="rivalry-detail">{t('rivalryWatch.battle', { rank })}</span>
+                      <strong>{rivalry.tiedPlayers.join(', ')}</strong>
+                      <span className="rivalry-detail">{t('rivalryWatch.leadTie', { count: rivalry.tiedPlayers.length })}</span>
+                    </p>
+                  </>
+                ) : rivalry.isTied ? (
+                  <>
+                    <span className="neck-neck-badge">{t('rivalryWatch.neckNeck')}</span>
+                    <p>
+                      <strong>{rivalry.player1}</strong> vs <strong>{rivalry.player2}</strong>
+                      <span className="rivalry-detail">{t('rivalryWatch.battle', { rank: rivalry.rank })}</span>
                     </p>
                   </>
                 ) : (
                   <p>
-                    <strong>{player2}</strong> {t('rivalryWatch.closing', { player: player1 })}
+                    <strong>{rivalry.player2}</strong> {t('rivalryWatch.closing', { player: rivalry.player1 })}
                     <span className="rivalry-gap">
-                      {gap} pts
-                      {momentum === 'closing' && <span className="momentum-arrow up"></span>}
-                      {momentum === 'widening' && <span className="momentum-arrow down"></span>}
+                      {rivalry.gap} pts
+                      {rivalry.momentum === 'closing' && <span className="momentum-arrow up"></span>}
+                      {rivalry.momentum === 'widening' && <span className="momentum-arrow down"></span>}
                     </span>
                   </p>
                 )}
@@ -248,6 +257,23 @@ function findRivalries(scores, entries) {
   const rivalries = [];
   const prevScores = entries.length >= 2 ? entries[entries.length - 2].scores : null;
 
+  // First, check for N-way ties at the lead
+  const topScore = sorted[0][1];
+  const tiedAtLead = sorted.filter(([, score]) => score === topScore);
+
+  if (tiedAtLead.length >= 2) {
+    // N-way tie for the lead
+    rivalries.push({
+      tiedPlayers: tiedAtLead.map(([player]) => player),
+      gap: 0,
+      isTied: true,
+      isLeadTie: true,
+      rank: 1
+    });
+    return rivalries;
+  }
+
+  // Otherwise, find close rivalries between consecutive players
   for (let i = 0; i < sorted.length - 1; i++) {
     const [player1, score1] = sorted[i];
     const [player2, score2] = sorted[i + 1];
@@ -267,6 +293,7 @@ function findRivalries(scores, entries) {
         player2,
         gap,
         isTied: gap === 0,
+        isLeadTie: false,
         momentum,
         rank: i + 1
       });
@@ -279,19 +306,20 @@ function findRivalries(scores, entries) {
 function findBigMover(entries) {
   if (entries.length < 2) return null;
 
-  // Look at last 7 days
-  const recent = entries.slice(-7);
+  // Look at last 3 weeks (21 days)
+  const recent = entries.slice(-21);
   let best = { player: null, gain: 0, date: null };
 
   for (let i = 1; i < recent.length; i++) {
     for (const player of Object.keys(recent[i].scores)) {
       const gain = recent[i].scores[player] - (recent[i - 1].scores[player] || 0);
-      // Prefer higher gains, and if equal, prefer more recent
-      if (gain > best.gain || (gain === best.gain && gain > 0)) {
+      // Only consider +2 and above, prefer higher gains and more recent
+      if (gain >= 2 && (gain > best.gain || (gain === best.gain && gain > 0))) {
         best = { player, gain, date: recent[i].date };
       }
     }
   }
 
-  return best.player ? best : null;
+  // Only return if we found a +2 or higher
+  return best.gain >= 2 ? best : null;
 }

@@ -4,7 +4,8 @@
     "detail": "{{count}} jugadores x ${{amount}}"
   },
   "payoutSplit": {
-    "title": "Distribucion de Premios"
+    "title": "Distribucion de Premios",
+    "lastPlacePenalty": "Ultimo lugar debe +$10"
   },
   "hotStreak": {
     "title": "Racha Caliente",
@@ -23,6 +24,7 @@
     "title": "Rivalidades",
     "neckNeck": "CODO A CODO!",
     "battle": "Batalla por el #{{rank}}!",
+    "leadTie": "(Empate a {{count}} por el liderato)",
     "closing": "acercandose a {{player}}!",
     "gap": "{{gap}} pts de diferencia!",
     "empty": "Sin batallas cerradas ahora"

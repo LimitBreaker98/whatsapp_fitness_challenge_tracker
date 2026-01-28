@@ -301,6 +301,12 @@
   color: var(--color-text-muted);
 }
 
+.last-place-penalty {
+  margin-top: 0.5rem;
+  color: var(--color-text-warning, #d97706);
+  font-weight: 500;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 500px) {
   .fun-stats {

@@ -335,6 +335,25 @@
   background: linear-gradient(90deg, rgba(205, 127, 50, 0.1) 0%, var(--color-bg) 100%);
 }
 
+/* Bars View */
+.bars-view-container {
+  position: relative;
+  touch-action: pan-y;
+}
+
+.bars-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0 0.5rem 0;
+}
+
+.bars-view-empty {
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-muted);
+}
+
 /* Mobile: stack header vertically */
 @media (max-width: 500px) {
   .progress-chart {

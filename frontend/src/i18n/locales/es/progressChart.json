@@ -29,7 +29,8 @@
   },
   "viewToggle": {
     "timeline": "Linea de Tiempo",
-    "podium": "Podio"
+    "podium": "Podio",
+    "bars": "Barras"
   },
   "podiumView": {
     "weekOf": "Semana del {{date}}",

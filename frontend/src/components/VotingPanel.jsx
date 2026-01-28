@@ -7,20 +7,26 @@ const TOTAL_VOTERS = 7;
 
 export default function VotingPanel() {
   const { t } = useTranslation('voting');
-  const [votes, setVotes] = useState({ timeline: 0, podium: 0, both: 0 });
+  const [votes, setVotes] = useState({ timeline: 0, podium: 0, bars: 0, both: 0 });
   const [code, setCode] = useState('');
   const [selectedChoice, setSelectedChoice] = useState(null);
   const [status, setStatus] = useState(null); // 'success', 'error', 'already_voted', 'invalid_code'
   const [statusMessage, setStatusMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const totalVotes = votes.timeline + votes.podium + votes.both;
+  const totalVotes = votes.timeline + votes.podium + votes.bars + votes.both;
   const allVoted = totalVotes >= TOTAL_VOTERS;
 
-  // Determine winner - "both" votes count toward both options for determining preference
+  // Determine winner - "both" votes count toward all options for determining preference
   const timelineTotal = votes.timeline + votes.both;
   const podiumTotal = votes.podium + votes.both;
-  const winner = timelineTotal > podiumTotal ? 'Timeline' : podiumTotal > timelineTotal ? 'Podium' : null;
+  const barsTotal = votes.bars + votes.both;
+  const maxVotes = Math.max(timelineTotal, podiumTotal, barsTotal);
+  const winners = [];
+  if (timelineTotal === maxVotes) winners.push('Timeline');
+  if (podiumTotal === maxVotes) winners.push('Podium');
+  if (barsTotal === maxVotes) winners.push('Bars');
+  const winner = winners.length === 1 ? winners[0] : null;
 
   useEffect(() => {
     async function loadVotes() {
@@ -88,6 +94,13 @@ export default function VotingPanel() {
           disabled={loading}
         >
           {t('podiumLabel')}
+        </button>
+        <button
+          className={`vote-btn ${selectedChoice === 'bars' ? 'selected' : ''}`}
+          onClick={() => setSelectedChoice('bars')}
+          disabled={loading}
+        >
+          {t('barsLabel')}
         </button>
         <button
           className={`vote-btn ${selectedChoice === 'both' ? 'selected' : ''}`}

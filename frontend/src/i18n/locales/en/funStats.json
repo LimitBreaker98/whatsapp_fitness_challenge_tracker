@@ -4,7 +4,8 @@
     "detail": "{{count}} players x ${{amount}}"
   },
   "payoutSplit": {
-    "title": "Payout Split"
+    "title": "Payout Split",
+    "lastPlacePenalty": "Last place owes +$10"
   },
   "hotStreak": {
     "title": "Hot Streak",
@@ -23,6 +24,7 @@
     "title": "Rivalry Watch",
     "neckNeck": "NECK & NECK!",
     "battle": "Battle for #{{rank}}!",
+    "leadTie": "({{count}}-way tie for the lead)",
     "closing": "closing in on {{player}}!",
     "gap": "{{gap}} pts apart!",
     "empty": "No close battles right now"
