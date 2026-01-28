@@ -4,7 +4,8 @@
     "dashboard": "Tablero",
     "rules": "Reglas",
     "admin": "Admin",
-    "historic": "Historico"
+    "historic": "Historico",
+    "votings": "Votaciones"
   },
   "loading": "Cargando...",
   "error": "Error: {{message}}",

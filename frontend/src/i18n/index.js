@@ -11,6 +11,7 @@ import enAdmin from './locales/en/admin.json';
 import enRules from './locales/en/rules.json';
 import enHistoricChallenges from './locales/en/historicChallenges.json';
 import enVoting from './locales/en/voting.json';
+import enVotings from './locales/en/votings.json';
 
 import esCommon from './locales/es/common.json';
 import esLeaderboard from './locales/es/leaderboard.json';
@@ -20,6 +21,7 @@ import esAdmin from './locales/es/admin.json';
 import esRules from './locales/es/rules.json';
 import esHistoricChallenges from './locales/es/historicChallenges.json';
 import esVoting from './locales/es/voting.json';
+import esVotings from './locales/es/votings.json';
 
 const resources = {
   en: {
@@ -31,6 +33,7 @@ const resources = {
     rules: enRules,
     historicChallenges: enHistoricChallenges,
     voting: enVoting,
+    votings: enVotings,
   },
   es: {
     common: esCommon,
@@ -41,6 +44,7 @@ const resources = {
     rules: esRules,
     historicChallenges: esHistoricChallenges,
     voting: esVoting,
+    votings: esVotings,
   },
 };
 

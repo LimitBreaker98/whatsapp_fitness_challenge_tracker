@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import Plot from 'react-plotly.js';
 import { fetchScores } from '../api';
 import { useTheme } from '../context/ThemeContext';
-import VotingPanel from './VotingPanel';
 import './ProgressChart.css';
 
 const COLORS = [
@@ -578,75 +577,71 @@ export default function ProgressChart({ selectedPlayer = null, onSelectPlayer = 
   };
 
   return (
-    <div className="progress-chart-wrapper">
-      <div className="progress-chart">
-        <div className="chart-header">
-          <div className="chart-header-left">
-            <h3>{t('title')}</h3>
-            {viewMode === 'timeline' && (
-              <select
-                className="aggregation-dropdown"
-                value={aggregation}
-                onChange={(e) => setAggregation(e.target.value)}
-              >
-                <option value="allTime">{t('aggregation.allTime')}</option>
-                <option value="weekly">{t('aggregation.weekly')}</option>
-                <option value="monthly">{t('aggregation.monthly')}</option>
-              </select>
-            )}
-          </div>
-          <div className="chart-header-right">
-            <div className="view-toggle">
-              <button
-                className={`view-toggle-btn ${viewMode === 'timeline' ? 'active' : ''}`}
-                onClick={() => setViewMode('timeline')}
-                title={t('viewToggle.timeline')}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-                </svg>
-              </button>
-              <button
-                className={`view-toggle-btn ${viewMode === 'podium' ? 'active' : ''}`}
-                onClick={() => setViewMode('podium')}
-                title={t('viewToggle.podium')}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <line x1="3" y1="9" x2="21" y2="9" />
-                  <line x1="9" y1="21" x2="9" y2="9" />
-                </svg>
-              </button>
-              <button
-                className={`view-toggle-btn ${viewMode === 'bars' ? 'active' : ''}`}
-                onClick={() => setViewMode('bars')}
-                title={t('viewToggle.bars')}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="12" width="4" height="9" />
-                  <rect x="10" y="6" width="4" height="15" />
-                  <rect x="17" y="3" width="4" height="18" />
-                </svg>
-              </button>
-            </div>
-            {viewMode === 'timeline' && (
-              <div className="active-hint">
-                {selectedPlayer ? (
-                  <>{t('showing', { player: selectedPlayer })} <span>{t('clickToReset')}</span></>
-                ) : (
-                  <span className="hint-muted">{t('hint')}</span>
-                )}
-              </div>
-            )}
-          </div>
+    <div className="progress-chart">
+      <div className="chart-header">
+        <div className="chart-header-left">
+          <h3>{t('title')}</h3>
+          {viewMode === 'timeline' && (
+            <select
+              className="aggregation-dropdown"
+              value={aggregation}
+              onChange={(e) => setAggregation(e.target.value)}
+            >
+              <option value="allTime">{t('aggregation.allTime')}</option>
+              <option value="weekly">{t('aggregation.weekly')}</option>
+              <option value="monthly">{t('aggregation.monthly')}</option>
+            </select>
+          )}
         </div>
-
-        {viewMode === 'timeline' && renderTimelineView()}
-        {viewMode === 'podium' && renderPodiumView()}
-        {viewMode === 'bars' && renderBarsView()}
+        <div className="chart-header-right">
+          <div className="view-toggle">
+            <button
+              className={`view-toggle-btn ${viewMode === 'timeline' ? 'active' : ''}`}
+              onClick={() => setViewMode('timeline')}
+              title={t('viewToggle.timeline')}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+            </button>
+            <button
+              className={`view-toggle-btn ${viewMode === 'podium' ? 'active' : ''}`}
+              onClick={() => setViewMode('podium')}
+              title={t('viewToggle.podium')}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <line x1="3" y1="9" x2="21" y2="9" />
+                <line x1="9" y1="21" x2="9" y2="9" />
+              </svg>
+            </button>
+            <button
+              className={`view-toggle-btn ${viewMode === 'bars' ? 'active' : ''}`}
+              onClick={() => setViewMode('bars')}
+              title={t('viewToggle.bars')}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="12" width="4" height="9" />
+                <rect x="10" y="6" width="4" height="15" />
+                <rect x="17" y="3" width="4" height="18" />
+              </svg>
+            </button>
+          </div>
+          {viewMode === 'timeline' && (
+            <div className="active-hint">
+              {selectedPlayer ? (
+                <>{t('showing', { player: selectedPlayer })} <span>{t('clickToReset')}</span></>
+              ) : (
+                <span className="hint-muted">{t('hint')}</span>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
-      <VotingPanel />
+      {viewMode === 'timeline' && renderTimelineView()}
+      {viewMode === 'podium' && renderPodiumView()}
+      {viewMode === 'bars' && renderBarsView()}
     </div>
   );
 }

@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from parser import parse_message, ParseError
-from storage import load_data, load_profiles, add_entry, get_latest_entry, get_previous_entry, entry_exists, get_vote_counts, submit_vote, reset_votes
+from storage import load_data, load_profiles, add_entry, get_latest_entry, get_previous_entry, entry_exists, load_votes, get_vote_counts, submit_vote, reset_votes, load_votes_history, archive_vote, create_vote
 
 PACIFIC_TZ = ZoneInfo("America/Los_Angeles")
 
@@ -64,6 +64,11 @@ class UpdateResponse(BaseModel):
 class VoteRequest(BaseModel):
     code: str
     choice: str  # "ten", "twenty", or "thirty" (last place penalty amount)
+
+
+class CreateVoteRequest(BaseModel):
+    topic: str
+    options: list  # [{"key": "option1", "label": "Option 1"}, ...]
 
 
 def _compute_daily_gains(current_scores: dict, previous_scores: Optional[dict]) -> dict:
@@ -251,8 +256,16 @@ def health_check():
 
 @app.get("/api/votes")
 def get_votes():
-    """Get current vote counts for chart views."""
-    return get_vote_counts()
+    """Get current vote state including topic, options, counts, and active status."""
+    votes = load_votes()
+    return {
+        "is_active": votes.get("is_active", True),
+        "topic": votes.get("topic", ""),
+        "options": votes.get("options", []),
+        "vote_counts": votes.get("vote_counts", {}),
+        "total_voters": len(votes.get("vote_codes", {})),
+        "votes_cast": sum(1 for v in votes.get("vote_codes", {}).values() if v.get("voted") is not None),
+    }
 
 
 @app.post("/api/vote")
@@ -274,7 +287,9 @@ def post_vote(vote_request: VoteRequest, request: Request):
         elif result["error"] == "already_voted":
             raise HTTPException(status_code=400, detail="This code has already voted!")
         elif result["error"] == "invalid_choice":
-            raise HTTPException(status_code=400, detail="Choice must be 'ten', 'twenty', or 'thirty'")
+            raise HTTPException(status_code=400, detail="Invalid choice for this vote.")
+        elif result["error"] == "voting_closed":
+            raise HTTPException(status_code=400, detail="No active vote at this time.")
 
     return result
 
@@ -287,3 +302,51 @@ def reset_votes_endpoint(x_api_key: str = Header(None)):
 
     reset_votes()
     return {"success": True, "message": "Votes have been reset"}
+
+
+@app.get("/api/votes/history")
+def get_votes_history():
+    """Get history of all archived votes."""
+    history = load_votes_history()
+    return history
+
+
+@app.post("/api/votes/archive")
+def archive_vote_endpoint(x_api_key: str = Header(None)):
+    """Archive current vote to history. Requires API key."""
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+    result = archive_vote()
+
+    if "error" in result:
+        if result["error"] == "no_active_vote":
+            raise HTTPException(status_code=400, detail="No active vote to archive.")
+
+    return result
+
+
+@app.post("/api/votes/new")
+def create_vote_endpoint(request: CreateVoteRequest, x_api_key: str = Header(None)):
+    """Create a new vote with topic and options. Requires API key."""
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+    if not request.topic.strip():
+        raise HTTPException(status_code=400, detail="Topic cannot be empty.")
+
+    if not request.options or len(request.options) < 2:
+        raise HTTPException(status_code=400, detail="Must provide at least 2 options.")
+
+    # Validate options format
+    for opt in request.options:
+        if not isinstance(opt, dict) or "key" not in opt or "label" not in opt:
+            raise HTTPException(status_code=400, detail="Each option must have 'key' and 'label'.")
+
+    result = create_vote(request.topic.strip(), request.options)
+
+    if "error" in result:
+        if result["error"] == "vote_already_active":
+            raise HTTPException(status_code=400, detail="A vote is already active. Archive it first.")
+
+    return result

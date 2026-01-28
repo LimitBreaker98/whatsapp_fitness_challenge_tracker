@@ -25,5 +25,9 @@
     "Pocho": "Debuguea con burpees, deploya sprints a prod.",
     "Mene": "Cardio de ingeniero civil: salta andamios como Mario.",
     "Josh": "Arregla reps como este sitio: ship, lift, repeat."
+  },
+  "voteBanner": {
+    "message": "Tu voto es necesario!",
+    "cta": "Votar"
   }
 }

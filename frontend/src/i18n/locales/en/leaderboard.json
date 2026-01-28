@@ -25,5 +25,9 @@
     "Pocho": "Debugs with burpees, deploys sprints to prod.",
     "Mene": "Civil-engineer cardio: jumps scaffolds like Mario.",
     "Josh": "Fixes results and reps like this site: ship, lift, repeat."
+  },
+  "voteBanner": {
+    "message": "Your vote is needed!",
+    "cta": "Vote Now"
   }
 }

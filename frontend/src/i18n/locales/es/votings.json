@@ -1,0 +1,33 @@
+{
+  "title": "Votaciones",
+  "currentVote": {
+    "title": "Votacion Actual",
+    "noActiveVote": "No hay votacion activa en este momento.",
+    "votesRemaining": "{{count}} votos restantes",
+    "allVoted": "Todos los votos han sido emitidos!",
+    "winner": "{{choice}} gana!",
+    "tie": "Es un empate!"
+  },
+  "history": {
+    "title": "Historial de Votaciones",
+    "noHistory": "No hay votaciones pasadas.",
+    "finalizedAt": "Finalizada",
+    "totalVotes": "{{count}} votos",
+    "winner": "Ganador: {{choice}}",
+    "tie": "Resultado: Empate",
+    "voters": "Votantes: {{names}}"
+  },
+  "form": {
+    "codePlaceholder": "Codigo secreto",
+    "voteButton": "Votar",
+    "submitting": "Votando..."
+  },
+  "status": {
+    "thankYou": "Gracias {{name}}! Tu voto ha sido registrado.",
+    "alreadyVoted": "Este codigo ya ha votado!",
+    "invalidCode": "Codigo invalido. Pidele a Jorge tu codigo de votacion.",
+    "rateLimited": "Demasiados intentos. Espera un minuto.",
+    "votingClosed": "La votacion esta cerrada.",
+    "error": "Algo salio mal. Por favor intenta de nuevo."
+  }
+}

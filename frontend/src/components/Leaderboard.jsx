@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { fetchLatest, fetchProfiles, fetchScores } from '../api';
+import { Link } from 'react-router-dom';
+import { fetchLatest, fetchProfiles, fetchScores, fetchVotes } from '../api';
 import './Leaderboard.css';
 
 // Calculate streak (consecutive days with gains > 0)
@@ -42,6 +43,7 @@ export default function Leaderboard({ selectedPlayer = null, onSelectPlayer = ()
   const [newPlayers, setNewPlayers] = useState(new Set());
   const [streaks, setStreaks] = useState({});
   const [profiles, setProfiles] = useState({});
+  const [activeVote, setActiveVote] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -58,6 +60,17 @@ export default function Leaderboard({ selectedPlayer = null, onSelectPlayer = ()
           profileData = await fetchProfiles();
         } catch (profileError) {
           profileData = {};
+        }
+
+        // Fetch active vote status
+        let voteData = null;
+        try {
+          voteData = await fetchVotes();
+          if (voteData?.is_active) {
+            setActiveVote(voteData);
+          }
+        } catch (voteError) {
+          // Silently ignore vote fetch errors
         }
 
         // Calculate max possible score (for progress bar scaling)
@@ -139,6 +152,14 @@ export default function Leaderboard({ selectedPlayer = null, onSelectPlayer = ()
     <div className="leaderboard">
       <h2>{t('title')}</h2>
       <p className="date">{t('lastUpdate', { date: data.date })}</p>
+
+      {activeVote && (
+        <Link to="/votings" className="vote-banner">
+          <span className="vote-banner-icon">🗳️</span>
+          <span className="vote-banner-text">{t('voteBanner.message')}</span>
+          <span className="vote-banner-cta">{t('voteBanner.cta')}</span>
+        </Link>
+      )}
 
       <div className="players">
         {/* Column headers */}

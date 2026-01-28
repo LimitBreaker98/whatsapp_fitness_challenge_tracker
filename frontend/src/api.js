@@ -60,3 +60,46 @@ export async function submitVote(code, choice) {
 
   return data;
 }
+
+export async function fetchVotesHistory() {
+  const response = await fetch(`${API_BASE}/api/votes/history`);
+  if (!response.ok) throw new Error('Failed to fetch votes history');
+  return response.json();
+}
+
+export async function archiveVote(apiKey) {
+  const response = await fetch(`${API_BASE}/api/votes/archive`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': apiKey,
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.detail || 'Failed to archive vote');
+  }
+
+  return data;
+}
+
+export async function createVote(topic, options, apiKey) {
+  const response = await fetch(`${API_BASE}/api/votes/new`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': apiKey,
+    },
+    body: JSON.stringify({ topic, options }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.detail || 'Failed to create vote');
+  }
+
+  return data;
+}

@@ -4,7 +4,8 @@
     "dashboard": "Dashboard",
     "rules": "Rules",
     "admin": "Admin",
-    "historic": "Historic"
+    "historic": "Historic",
+    "votings": "Votings"
   },
   "loading": "Loading...",
   "error": "Error: {{message}}",
