@@ -370,3 +370,24 @@ def create_vote(topic: str, options: list) -> dict:
 
     save_votes(votes)
     return {"success": True}
+
+
+# Backup export function
+
+def export_all_data() -> dict:
+    """
+    Export all data files for backup purposes.
+    Returns a dict with all data that can be used to restore state.
+    """
+    from datetime import datetime
+    from zoneinfo import ZoneInfo
+
+    pacific_tz = ZoneInfo("America/Los_Angeles")
+
+    return {
+        "exported_at": datetime.now(pacific_tz).isoformat(),
+        "data": load_data(),
+        "votes": load_votes() if VOTES_FILE.exists() else None,
+        "votes_history": load_votes_history() if VOTES_HISTORY_FILE.exists() else None,
+        # Note: profiles.json is bundled in the repo, no need to backup
+    }

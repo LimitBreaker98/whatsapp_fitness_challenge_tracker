@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from parser import parse_message, ParseError
-from storage import load_data, load_profiles, add_entry, get_latest_entry, get_previous_entry, entry_exists, load_votes, get_vote_counts, submit_vote, reset_votes, load_votes_history, archive_vote, create_vote
+from storage import load_data, load_profiles, add_entry, save_data, get_latest_entry, get_previous_entry, entry_exists, load_votes, get_vote_counts, submit_vote, reset_votes, load_votes_history, archive_vote, create_vote, export_all_data
 
 PACIFIC_TZ = ZoneInfo("America/Los_Angeles")
 
@@ -350,3 +350,92 @@ def create_vote_endpoint(request: CreateVoteRequest, x_api_key: str = Header(Non
             raise HTTPException(status_code=400, detail="A vote is already active. Archive it first.")
 
     return result
+
+
+@app.get("/api/backup")
+def get_backup(x_api_key: str = Header(None)):
+    """
+    Export all data for backup. Requires API key.
+    Returns JSON with all data files that can be used to restore state.
+    """
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+    return export_all_data()
+
+
+class PatchEntryRequest(BaseModel):
+    date: str
+    scores: dict[str, int]
+
+
+@app.patch("/api/admin/patch-entry")
+def patch_entry(request: PatchEntryRequest, x_api_key: str = Header(None)):
+    """
+    Patch a historical entry's scores directly. Bypasses date restrictions.
+    Validates that gains relative to adjacent entries use allowed values (0, 1, 2, 4).
+    Requires API key. Not exposed in frontend or admin panel.
+    """
+    if x_api_key != API_KEY:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+    # Validate date format
+    try:
+        datetime.strptime(request.date, "%Y-%m-%d")
+    except ValueError:
+        raise HTTPException(status_code=400, detail=f"Invalid date format: {request.date}")
+
+    data = load_data()
+    entries = data["entries"]
+
+    # Find the entry and its neighbors
+    target_idx = None
+    for i, entry in enumerate(entries):
+        if entry["date"] == request.date:
+            target_idx = i
+            break
+
+    if target_idx is None:
+        raise HTTPException(status_code=404, detail=f"No entry found for {request.date}")
+
+    ALLOWED_GAINS = {0, 1, 2, 4}
+
+    # Validate gains against previous entry
+    if target_idx > 0:
+        prev_scores = entries[target_idx - 1]["scores"]
+        invalid = []
+        for player, score in request.scores.items():
+            if player in prev_scores:
+                gain = score - prev_scores[player]
+                if gain < 0:
+                    invalid.append(f"{player}: {prev_scores[player]} -> {score} (decrease)")
+                elif gain not in ALLOWED_GAINS:
+                    invalid.append(f"{player}: +{gain} (invalid gain)")
+        if invalid:
+            raise HTTPException(status_code=400, detail=f"Invalid vs previous day: {', '.join(invalid)}")
+
+    # Validate gains against next entry
+    if target_idx < len(entries) - 1:
+        next_scores = entries[target_idx + 1]["scores"]
+        invalid = []
+        for player, score in next_scores.items():
+            if player in request.scores:
+                gain = score - request.scores[player]
+                if gain < 0:
+                    invalid.append(f"{player}: {request.scores[player]} -> {score} (decrease)")
+                elif gain not in ALLOWED_GAINS:
+                    invalid.append(f"{player}: +{gain} (invalid gain)")
+        if invalid:
+            raise HTTPException(status_code=400, detail=f"Invalid vs next day: {', '.join(invalid)}")
+
+    # Apply the patch
+    old_scores = entries[target_idx]["scores"]
+    entries[target_idx]["scores"] = request.scores
+    save_data(data)
+
+    return {
+        "success": True,
+        "date": request.date,
+        "old_scores": old_scores,
+        "new_scores": request.scores,
+    }
